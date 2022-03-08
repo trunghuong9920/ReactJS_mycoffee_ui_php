@@ -134,8 +134,10 @@ function ListCategory() {
                 })
         }
         else{
-            const api = port + '/categorys?name='+search
-            fetch(api)
+            const api = port + '/searchcate/'+search
+            fetch(api, {
+                method: "POST"
+            })
                 .then(res => res.json())
                 .then(data => {
                     setGetData(data)

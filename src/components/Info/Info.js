@@ -10,8 +10,8 @@ function Info() {
     const port = config()
     const {editData} = ApiController()
     const [data, setData] = useState([])
-    const getAccount = localStorage.getItem("account")
-    const api = port + "/users?account=" + getAccount
+    const getAccount = localStorage.getItem("idaccount")
+    const api = port + "/info/" + getAccount
 
     const [id, setId] = useState('')
     const [avata, setAvata] = useState('')
@@ -26,7 +26,9 @@ function Info() {
     const [errorPass, setErrorPass] = useState('')
 
     useEffect(() => {
-        fetch(api)
+        fetch(api, {
+            method: "POST"
+        })
             .then(res => res.json())
             .then(data => {
                 setData(data)
@@ -36,7 +38,7 @@ function Info() {
                     setAccount(item.account)
                     setName(item.name)
                     setPhone(item.phone)
-                    setOldPass(item.password)
+                    setOldPass("000000")
                     setPermission(item.permission)
                 })
             })

@@ -14,6 +14,7 @@ function Header(){
     const port = config()
     const [avata, setAvata] = useState('')
     const [name, setName] = useState('')
+    const [permission,setPermission] = useState('')
     const location = useLocation()
     const [hideHeaderAccount, setHideHeaderAccount] = useState()
 
@@ -21,15 +22,21 @@ function Header(){
     if(location.pathname === '/admin'){
         activeAdmin = true
     }
-    const getAccount = localStorage.getItem("account")
-    const api = port + "/users?account=" + getAccount
+    const getAccount = localStorage.getItem("idaccount")
+    const api = port + "/info/" + getAccount
     useEffect(() =>{
-        fetch(api)
-          .then(res => res.json())
-          .then(datas => {
-            datas.map(item =>{
-                setAvata(item.avata)
-                setName(item.name)
+        fetch(api, {
+            method: "POST"
+        })
+        .then(res =>{
+            res.text()
+            .then(_data =>{
+                const data = JSON.parse(_data);
+                data.map(item =>{
+                    setAvata(item.avata)
+                    setName(item.name)
+                    setPermission(item.permission)
+                })
             })
         })
       }, [])
@@ -43,7 +50,13 @@ function Header(){
                             <img className='header-logo' src={logo} alt='logo'/>
                         </Link>
                     </li>
-                    <li className='header-left_item'>
+                    <li className={clsx('header-left_item', 
+                        permission == 0 ? {
+                            'hidden_forpermission': false
+                        }:{
+                            'hidden_forpermission': true
+                        }
+                    )}>
                         <Link to="/admin" className={clsx('header-left_link', 'header_link-hover', {
                             'header_link-active':activeAdmin
                         })}>
@@ -75,7 +88,7 @@ function Header(){
                         <label htmlFor='cb_header_account' className='header-right_link-avta'
                             onClick={()=>setHideHeaderAccount(!hideHeaderAccount)}
                         >
-                            <img  className='header-avata' src={avata} alt="avata"/></label>
+                            <img  className='header-avata' src={avata || nobody} alt="avata"/></label>
                         <input type="checkbox" id='cb_header_account' hidden className='cb_header_account'
                             checked = {hideHeaderAccount}
                         />

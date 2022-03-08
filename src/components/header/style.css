@@ -132,3 +132,7 @@
 .cb_header_account:checked ~.header_account{
     display: block;
 }
+
+.hidden_forpermission{
+    display: none;
+}

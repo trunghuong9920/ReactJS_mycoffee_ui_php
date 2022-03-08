@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { AdminRoute } from './AdminRouter.js';
 import Header from './components/header/Header'
 import Login from './components/login/Login'
+import logo from './images/logo.png'
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
   }
   
   useEffect(()=>{
+    
     if(localStorage.getItem("idaccount")){
       checkLocalstorage = true
     }

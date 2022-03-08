@@ -9,7 +9,7 @@ import DeleteAccount from "./DeleteAccount"
 import config from "../../../_config"
 import clsx from "clsx"
 
-const listCategorys = ["Id", "Ảnh đại diện", "Tên tài khoản", "Tên nhân viên", "Số điện thoại", "Quyền truy cập","Trạng thái", "Thao tác"]
+const listCategorys = ["Id", "Ảnh đại diện", "Tên tài khoản", "Tên nhân viên", "Số điện thoại", "Quyền truy cập", "Trạng thái", "Thao tác"]
 function ListAccount() {
     const port = config()
     const [getData, setGetData] = useState([])
@@ -85,13 +85,12 @@ function ListAccount() {
     const handleReloadForAdd = (formData) => {
         const data = [...getData]
         const newData = {
-            id: lastItem.id + 1,
+            id: parseInt(lastItem.id)+1,
             account: formData.account,
             name: formData.name,
             phone: formData.phone,
             avata: formData.avata,
-            permission: formData.permission,
-            password: formData.password
+            status: 0,
         }
         data.push(newData)
         setGetData(data)
@@ -127,9 +126,11 @@ function ListAccount() {
                     setGetData(data)
                 })
         }
-        else{
-            const api = port + '/users?account='+search
-            fetch(api)
+        else {
+            const api = port + '/searchusers/' + search
+            fetch(api, {
+                method: "POST"
+            })
                 .then(res => res.json())
                 .then(data => {
                     setGetData(data)
@@ -246,22 +247,35 @@ function ListAccount() {
                                     </div>
                                     <div className="ListAccout_category_col"
                                     >
-                                        <h3 className="ListAccount_body_col_value">{item.permission}</h3>
+                                        <h3 className="ListAccount_body_col_value">{
+                                            item.permission == 0 ? 'Quản lý' : 'Nhân viên'
+                                        }</h3>
                                     </div>
                                     <div className="ListAccout_category_col"
                                     >
                                         <div className="statusForm">
                                             <input
                                                 type={"checkbox"}
-                                                hidden ={true}
-                                                id = {`statusForm-${item.id}`}
+                                                hidden={true}
+                                                id={`statusForm-${item.id}`}
                                             />
                                             <label
-                                                className={clsx('statusForm-unlock','statusForm_activeUnlock')}
+                                                className={clsx('statusForm-unlock',
+                                                    item.status == 0 ? {
+                                                        'statusForm_activeUnlock': false
+                                                    } : {
+                                                        'statusForm_activeUnlock': true
+                                                    }
+                                                )}
                                                 htmlFor={`statusForm-${item.id}`}
                                             ><i className="ti-unlock"></i></label>
                                             <label
-                                                className={clsx('statusForm-lock' )}
+                                                className={clsx('statusForm-lock',
+                                                    item.status == 1 ? {
+                                                        'statusForm_activeUnlock': false
+                                                    } : {
+                                                        'statusForm_activeUnlock': true
+                                                    })}
                                                 htmlFor={`statusForm-${item.id}`}
                                             ><i className="ti-lock"></i></label>
                                         </div>

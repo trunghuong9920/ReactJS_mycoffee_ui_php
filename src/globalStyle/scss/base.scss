@@ -144,6 +144,10 @@ $text-color-3: #fff;
                     }
                 }
             }
+            &-error{
+                color: red;
+                font-size: 1.4rem;
+            }
         }
     }
     &_footer{

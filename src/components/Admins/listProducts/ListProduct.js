@@ -122,8 +122,10 @@ function ListProduct() {
                 })
         }
         else {
-            const api = port + '/products?name='+ search
-            fetch(api)
+            const api = port + '/searchproducts/'+ search
+            fetch(api, {
+                method: "POST"
+            })
                 .then(res => res.json())
                 .then(data => {
                     setGetData(data)
@@ -228,7 +230,7 @@ function ListProduct() {
                                         <h3 className="product_body_row_col_value">{item.name}</h3>
                                     </div>
                                     <div className="product_body_row_col">
-                                        <h3 className="product_body_row_col_value">{item.nameC}</h3>
+                                        <h3 className="product_body_row_col_value">{item.category}</h3>
                                     </div>
                                     <div className="product_body_row_col">
                                         <h3 className="product_body_row_col_value">{item.price}</h3>

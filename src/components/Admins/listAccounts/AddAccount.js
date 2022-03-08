@@ -6,49 +6,64 @@ import ApiController from '../../../services/apiController'
 import config from '../../../_config'
 import AccountController from './AccountController'
 
-function AddAccount({hide , handleReloadForAdd}) {
-    const {create} = ApiController()
-    const {CheckInfo} = AccountController()
+function AddAccount({ hide, handleReloadForAdd }) {
+    const { create } = ApiController()
+    const { CheckInfo } = AccountController()
     const port = config()
     const [urlImg, setUrlImg] = useState('')
     const [avata, setAvata] = useState('')
-    const [permission, setPermission] = useState('Quản lý')
+    const [permission, setPermission] = useState(0)
     const [account, setAccount] = useState('')
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPass, setConfirmPass] = useState('')
     const [error, setError] = useState('')
+    const [errorConfirmPass, setErrorConfirmPass] = useState('')
+    const [errorPhone, setErrorPhone] = useState('')
+    const [errorAccount, setErrorAccount] = useState('')
 
     const handleGetValueSelect = (e) => {
-        if (e.target.value === '1') {
-            setPermission("Nhân viên")
-        }
-        else {
-            setPermission("Quản lý")
-        }
+        setPermission(e.target.value)
     }
 
 
     //add
-    
-    const handleSaveAccount = () =>{
-        if(CheckInfo(account,name,phone,password,confirmPass)){
-            const formData = {
-                account:account,
-                name:name,
-                phone:phone,
-                avata:urlImg,
-                permission:permission,
-                password:password
+
+    const handleSaveAccount = () => {
+        if (CheckInfo(account, name, phone, password, confirmPass) && errorPhone === '' && errorConfirmPass === '') {
+            if (urlImg === '') {
+                const newUrl = 'a'
+                const formData = {
+                    account: account.replace(/\s+/g, ''),
+                    name: name,
+                    phone: phone,
+                    avata: newUrl,
+                    permission: permission,
+                    status: 0
+                }
+                const api = port + "/users/" + account.replace(/\s+/g, '') + "/" + name + "/" + phone + "/" + newUrl + "/" + permission + "/" + password.replace(/\s+/g, '')
+                // create(api)
+                handleReloadForAdd(formData)
+                hide();
             }
-            const api = port +"/users"
-            create(api,formData)
-            handleReloadForAdd(formData)
-            hide();
-            
+            else {
+                const formData = {
+                    account: account.replace(/\s+/g, ''),
+                    name: name,
+                    phone: phone,
+                    avata: urlImg,
+                    permission: permission,
+                    status: 0
+                }
+                const api = port + "/users/" + account.replace(/\s+/g, '') + "/" + name + "/" + phone + "/" + urlImg + "/" + permission + "/" + password.replace(/\s+/g, '')
+                // create(api)
+                handleReloadForAdd(formData)
+                hide();
+            }
+
         }
-        else{
+        else {
             setError("Vui lòng nhập đầy đủ thông tin!")
         }
     }
@@ -73,6 +88,42 @@ function AddAccount({hide , handleReloadForAdd}) {
         setUrlImg('')
         setAvata('')
     }
+
+    const handleCheckAccount = (e) => {
+        setAccount(e.target.value)
+    }
+
+    const handleCheckPhone = (e) => {
+        setPhone(e.target.value)
+        if (is_phonenumber(e.target.value)) {
+            setErrorPhone('')
+        }
+        else {
+            setErrorPhone('Số điện thoại không đúng!')
+        }
+    }
+
+
+    function is_phonenumber(phonenumber) {
+        const phoneno = /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;
+        if (phonenumber.match(phoneno)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    const handleConfirmPass = (e) => {
+        setConfirmPass(e.target.value)
+
+        if (e.target.value === password) {
+            setErrorConfirmPass('')
+        }
+        else {
+            setErrorConfirmPass('Mật khẩu xác nhận không chính xác!')
+        }
+    }
+
     return (
         <>
             <div className="modal_body">
@@ -102,15 +153,16 @@ function AddAccount({hide , handleReloadForAdd}) {
                     <input className="form_group_input"
                         placeholder='Nhập tên tài khoản...'
                         value={account}
-                        onChange = {e => setAccount(e.target.value)}
+                        onChange={handleCheckAccount}
                     />
+                    <p className='form_group-error'>{errorAccount}</p>
                 </div>
                 <div className="form_group">
                     <h3 className="form_group_title">Tên nhân viên:</h3>
                     <input className="form_group_input"
                         placeholder='Nhập tên nhân viên...'
                         value={name}
-                        onChange = {e => setName(e.target.value)}
+                        onChange={e => setName(e.target.value)}
                     />
                 </div>
                 <div className="form_group">
@@ -118,8 +170,9 @@ function AddAccount({hide , handleReloadForAdd}) {
                     <input className="form_group_input"
                         placeholder='Số điện thoại là các chữ số...'
                         value={phone}
-                        onChange = {e => setPhone(e.target.value)}
+                        onChange={handleCheckPhone}
                     />
+                    <p className='form_group-error'>{errorPhone}</p>
                 </div>
                 <div className="form_group">
                     <h3 className="form_group_title">Quyền truy cập:</h3>
@@ -135,7 +188,7 @@ function AddAccount({hide , handleReloadForAdd}) {
                     <input className="form_group_input"
                         placeholder='Nhập mật khẩu...'
                         value={password}
-                        onChange = {e => setPassword(e.target.value)}
+                        onChange={e => setPassword(e.target.value)}
                     />
                 </div>
                 <div className="form_group">
@@ -143,8 +196,9 @@ function AddAccount({hide , handleReloadForAdd}) {
                     <input className="form_group_input"
                         placeholder='Nhập lại mật khẩu...'
                         value={confirmPass}
-                        onChange = {e => setConfirmPass(e.target.value)}
+                        onChange={handleConfirmPass}
                     />
+                    <p className='form_group-error'>{errorConfirmPass}</p>
                 </div>
             </div>
             <div className="modal_footer">

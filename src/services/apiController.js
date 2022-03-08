@@ -1,23 +1,17 @@
 function ApiController() {
-    const create = (api,formData) => {
-        const options = {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-
-        }
-        fetch(api, options)
+    const create = (api) => {
+        fetch(api, {
+            method: "POST"
+        })
             .then(res => res.json())
-            .then(datas => {
+            .then(data => {
             })
             .catch(error => {
                 console.error('Error:', error);
             });
     }
 
-    const editData = (api,formData) => {
+    const editData = (api, formData) => {
         const options = {
             method: "PUT",
             headers: {
@@ -34,23 +28,23 @@ function ApiController() {
                 console.error('Error:', error);
             });
     }
-    const deleteData = (api,id) =>{
+    const deleteData = (api, id) => {
         const options = {
-            method:"DELETE",
+            method: "DELETE",
             headers: {
-              'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
             }
-          }
-          fetch(api+'/'+id,options)
+        }
+        fetch(api + '/' + id, options)
             .then(res => res.json())
-            .then(() =>{
-              
+            .then(() => {
+
             })
             .catch(error => {
-              console.error('Error:', error);
+                console.error('Error:', error);
             });
     }
 
-    return {create, editData,deleteData}
+    return { create, editData, deleteData }
 }
 export default ApiController

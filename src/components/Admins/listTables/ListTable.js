@@ -120,8 +120,10 @@ function ListTable() {
                 })
         }
         else{
-            const api = port + '/tables?name=' + search
-            fetch(api)
+            const api = port + '/searchtables/' + search
+            fetch(api, {
+                method : "POST"
+            })
                 .then(res => res.json())
                 .then(data => {
                     setGetData(data)
@@ -231,10 +233,14 @@ function ListTable() {
                                         <h3 className="listTable_body_row_col_value">{item.name}</h3>
                                     </div>
                                     <div className="listTable_body_row_col">
-                                        <h3 className="listTable_body_row_col_value">{item.status}</h3>
+                                        <h3 className="listTable_body_row_col_value">{
+                                            item.status == 0 ? 'Trống' : 'Có người'
+                                        }</h3>
                                     </div>
                                     <div className="listTable_body_row_col">
-                                        <h3 className="listTable_body_row_col_value">{item.area}</h3>
+                                        <h3 className="listTable_body_row_col_value">{
+                                            item.area == 0 ? 'Ngoài sân' : item.area == 1 ? 'Tầng 1' :'Tầng 2' 
+                                        }</h3>
                                     </div>
                                     <div className="listTable_body_row_col">
                                         <div className="listTable_body_row_col_control">
