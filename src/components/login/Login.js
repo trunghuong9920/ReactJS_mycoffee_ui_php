@@ -19,21 +19,48 @@ function Login() {
         return true
     }
 
+    useEffect(()=>{
+        if(data.length >0){
+            data.map(item=>{
+                if(item.status == 1){
+                    setError("Tài khoản đã bị khóa!")
+                }
+                if(item.status == 0){
+                    localStorage.setItem("idaccount", item.id)
+                    navigate('/')
+                }
+            })
+        }
+        else{
+            if(checkInfo(name, password)){
+            setError("Thông tin tài khoản hoặc mật khẩu không chính xác!")
+
+            }
+        }
+    }, [data])
+
     const handleLogin = () => {
-        const api = port + "/login/trunghuong/1"
-        create(api)
+        if(checkInfo(name, password)){
+            setError("")
+            const api = port +"/login/"+name+"/" + password
+            create(api)
+            
+        }
+        else{
+            setError("Vui lòng nhập đầy đủ thông tin!")
+        }
+
     }
 
     const create = (api) => {
-        fetch(api,{
-            method:  "POST"
+        fetch(api, {
+            method: "POST"
         })
         .then(res =>{
             res.text()
             .then(_data =>{
-                console.log(_data);
-                // const data = JSON.parse(_data);
-                // setData(data.list)
+                const data = JSON.parse(_data);
+                setData(data);
             })
         })
     }

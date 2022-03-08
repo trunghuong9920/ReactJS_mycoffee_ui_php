@@ -16,7 +16,7 @@ function App() {
   }
   
   useEffect(()=>{
-    if(localStorage.getItem("account")){
+    if(localStorage.getItem("idaccount")){
       checkLocalstorage = true
     }
     else{
