@@ -1,0 +1,232 @@
+{
+  "users": [
+    {
+      "account": "Admin",
+      "name": "Ma Trung Hướn",
+      "phone": "0395749843",
+      "avata": "https://scontent.fhan2-3.fna.fbcdn.net/v/t1.6435-9/171505849_1154496398337506_1856116372601333077_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=q8PiVp_SX1sAX9jiiU8&_nc_ht=scontent.fhan2-3.fna&oh=00_AT-Clf7O8SvmUBUmUoyEub8468COQUBDj2syiTsL79AeGg&oe=6244681E",
+      "permission": "Nhân viên",
+      "password": "1",
+      "id": 1
+    },
+    {
+      "account": "HanhHanh",
+      "name": "Triệu Thị Hạnh",
+      "phone": "8437028",
+      "avata": "",
+      "permission": "Quản lý",
+      "password": "1",
+      "id": 3
+    },
+    {
+      "account": "trunghuong",
+      "name": "Trung Hướng",
+      "phone": "0395749843",
+      "avata": "https://taimienphi.vn/tmp/cf/aut/anh-gai-xinh-1.jpg",
+      "permission": "Nhân viên",
+      "password": "1",
+      "id": 8
+    }
+  ],
+  "tables": [
+    {
+      "name": "A1",
+      "status": "Trống",
+      "area": "Tầng 1",
+      "id": 1
+    },
+    {
+      "name": "A2",
+      "status": "Trống",
+      "area": "Ngoài sân",
+      "id": 2
+    },
+    {
+      "name": "A3",
+      "status": "Trống",
+      "area": "Ngoài sân",
+      "id": 3
+    },
+    {
+      "name": "B1",
+      "status": "Trống",
+      "area": "Tầng 2",
+      "id": 4
+    }
+  ],
+  "categorys": [
+    {
+      "id": 1,
+      "name": "Cà phê truyền thống"
+    },
+    {
+      "name": "Cà phê máy",
+      "id": 2
+    },
+    {
+      "name": "Sinh tố",
+      "id": 3
+    },
+    {
+      "name": "Trà",
+      "id": 4
+    },
+    {
+      "name": "Cà phê sáng tạo",
+      "id": 5
+    },
+    {
+      "name": "Nước Ép",
+      "id": 6
+    }
+  ],
+  "products": [
+    {
+      "nameC": "Cà phê máy",
+      "idc": 2,
+      "name": "Nâu đá",
+      "price": 10000,
+      "img": "https://bboomersbar.com/cach-lam-cafe-nau-da/imager_54332.jpg",
+      "id": 1
+    },
+    {
+      "nameC": "Cà phê máy",
+      "idc": 2,
+      "name": "Đen đá",
+      "price": 10000,
+      "img": "https://neomartpro.com/wp-content/uploads/2020/05/cafedenda-1.jpg",
+      "id": 2
+    },
+    {
+      "nameC": "Sinh tố",
+      "idc": "3",
+      "name": "Xoài",
+      "price": "30000",
+      "img": "https://www.bartender.edu.vn/wp-content/uploads/2020/04/sinh-to-xoai.jpg",
+      "id": 5
+    },
+    {
+      "nameC": "Trà",
+      "idc": "4",
+      "name": "Trà Đào",
+      "price": "10000",
+      "img": "https://res.klook.com/image/upload/v1596017380/blog/fdhbsx1x6tmyswssvb1v.jpg",
+      "id": 6
+    },
+    {
+      "nameC": "Cà phê truyền thống",
+      "idc": 1,
+      "name": "Cà phê phin",
+      "price": "20000",
+      "img": "https://i.pinimg.com/564x/18/f8/22/18f822a007df869258b80a7c82471fa0.jpg",
+      "id": 7
+    },
+    {
+      "nameC": "Cà phê sáng tạo",
+      "idc": "5",
+      "img": "https://classiccoffee.com.vn/upload/afY3GsaH62R8X9niHhKcmcFTLfeEBKoL0nP.jpg",
+      "name": "Cà phê trứng",
+      "price": "40000",
+      "id": 8
+    },
+    {
+      "nameC": "Cà phê sáng tạo",
+      "idc": "5",
+      "img": "http://barista.vn/UserUpload/Product/ly-ca-phe-latte-300-ml-mau-cam-do.jpg?Watermark=",
+      "name": "Cà phê Latte",
+      "price": "45000",
+      "id": 9
+    },
+    {
+      "nameC": "Trà",
+      "idc": "4",
+      "img": "",
+      "name": "Trà Đào Cam Sả",
+      "price": "45000",
+      "id": 10
+    },
+    {
+      "nameC": "Sinh tố",
+      "idc": "3",
+      "img": "",
+      "name": "Việt quất",
+      "price": "55000",
+      "id": 11
+    }
+  ],
+  "orders": [
+    {
+      "idB": "3",
+      "img": "https://bboomersbar.com/cach-lam-cafe-nau-da/imager_54332.jpg",
+      "name": "Nâu đá",
+      "idP": 1,
+      "amount": 1,
+      "price": 10000,
+      "discount": 0,
+      "timeIn": "14:41 6-3-2022",
+      "id": 14
+    },
+    {
+      "idB": "3",
+      "img": "https://i.pinimg.com/564x/18/f8/22/18f822a007df869258b80a7c82471fa0.jpg",
+      "name": "Cà phê phin",
+      "idP": 7,
+      "amount": 1,
+      "price": "20000",
+      "discount": 0,
+      "timeIn": "15:42 6-3-2022",
+      "id": 15
+    },
+    {
+      "idB": "2",
+      "img": "https://i.pinimg.com/564x/18/f8/22/18f822a007df869258b80a7c82471fa0.jpg",
+      "name": "Cà phê phin",
+      "idP": 7,
+      "amount": 2,
+      "price": "20000",
+      "discount": 0,
+      "timeIn": "23:9 6-3-2022",
+      "id": 16
+    },
+    {
+      "idB": "2",
+      "img": "https://neomartpro.com/wp-content/uploads/2020/05/cafedenda-1.jpg",
+      "name": "Đen đá",
+      "idP": 2,
+      "amount": 1,
+      "price": 10000,
+      "discount": 0,
+      "timeIn": "12:55 7-3-2022",
+      "id": 17
+    },
+    {
+      "idB": "2",
+      "img": "",
+      "name": "Việt quất",
+      "idP": 11,
+      "amount": 1,
+      "price": "55000",
+      "discount": 0,
+      "timeIn": "13:37 7-3-2022",
+      "id": 18
+    }
+  ],
+  "login": [
+    {
+      "id": 1,
+      "account": "trunghuong"
+    }
+  ],
+  "test": [
+    {
+      "id": 1,
+      "account": "trunghuong",
+      "idb": 2
+    },
+    {
+      "id": 1,
+      "account": "trunghuong",
+      "idb": 2
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+@mixin btnEdit {
+    min-width: 30px;
+    min-height: 30px;
+    cursor: pointer;
+    position: relative;
+    background-color: $color-14;
+    color: $color-5;
+    &:hover {
+        background-color: $color-10;
+    }
+}
+
+@mixin btnEditInfo {
+    display: block;
+    min-width: 50px;
+    height: 30px;
+    border-radius: 12px;
+    border: 1px solid $color-2;
+    background-color: $color-5;
+    color: $color-4;
+    font-size: 1.4rem;
+    text-align: center;
+    padding-top: 4px;
+    margin: 0 8px;
+    cursor: pointer;
+    &:hover{
+        background-color: $color-17;
+    }
+}

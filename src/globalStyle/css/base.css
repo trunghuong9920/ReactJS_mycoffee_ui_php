@@ -1,0 +1,66 @@
+:root{
+    --color-1: #707070;
+    --color-2: #c7c4c4;
+    --color-3:#e08956;
+    --color-4: #8d8a8a;
+    --color-5: #fff;
+    --color-6: #ddd8d8;
+    --color-7:rgb(214, 52, 52);
+    --color-8: #f0eeee;
+    --color-9: rgb(240, 240, 122);
+    --color-10: rgb(240, 212, 122);
+    --color-11: #443d3d;
+    --color-12: #e6e0e0;
+    --color-13:rgb(199, 49, 12);
+    --color-14:rgb(207, 123, 28);
+    --color-15: #f5f5f5;
+    --color-16: #6260dd;
+    --color-17: #a7fc96;
+    --color-18:#3a4651;
+    --color-19:#85ce36;
+    --header-height:60px;
+    --header-bar: 30px;
+    --background-color: #e2e2e5;
+    --box-main: white;
+    --box-color-children:#474a59;
+    --text-color-1: rgb(134, 93, 209);
+    --text-color-2:#dd7373;
+    --text-color-3:#fff;
+    --height-order-body:85vh;
+    --height-order-list_order:45vh;
+    --height-order-list_product: 40vh ;
+}
+
+*{
+    box-sizing: inherit;        /*kế thừa box-sizing: boder-bõ*/
+}
+a{
+    text-decoration: none;
+}
+body, input, button, option, textarea, label, select, legend, h1, h2, h3, h4, h5, h6, h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+    /* font: 14px/18px Arial,Helvetica,sans-serif; */
+    color: #333;
+    outline: none;
+    border: none;
+}
+html{
+    /* 10px */
+    /* 1rem  = 10px */
+    font-size: 62.5%;
+    line-height: 1.6rem;
+    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;         /* = boder+padding */
+    background-color: #fff;
+}
+
+@keyframes fadeScale{
+    from{
+        opacity: 0;
+        transform: scale(0);
+    }
+    to{
+        opacity: 1;
+        transform: scale(1);
+
+    }
+}

@@ -1,0 +1,93 @@
+@import "../../../globalStyle/scss/base.scss";
+@import "../../../globalStyle/scss/mixin.scss";
+
+.product {
+    &_title {
+        display: flex;
+        background-color: $color-10;
+        height: 50px;
+        align-items: center;
+        &_col {
+            width: 30%;
+            display: flex;
+            justify-content: center;
+            border-right: 1px solid $color-5;
+            height: 100%;
+            h3 {
+                color: $color-11;
+                font-size: 1.4rem;
+                margin: 8px;
+            }
+        }
+        &_col:nth-child(1){
+            width: 10%;
+        }
+        &_col:nth-child(2){
+            width: 10%;
+        }
+        &_col:nth-child(4){
+            width: 20%;
+        }
+        &_col:nth-child(5){
+            width: 15%;
+        }
+        &_col:nth-child(6){
+            width: 15%;
+        }
+    }
+    &_body {
+        &_row {
+            display: flex;
+            height: 50px;
+            align-items: center;
+            &_col {
+                width: 30%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-right: 1px solid $color-5;
+                height: 100%;
+                h3 {
+                    color: $color-11;
+                    font-size: 1.4rem;
+                    margin: 8px;
+                }
+                &_control {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100%;
+                    &-edit,
+                    &-delete {
+                        margin: 0 22px;
+                        cursor: pointer;
+                        @include btnEdit();
+                    }
+                }
+                &_img{
+                    height: 50px;
+                    width: auto;
+                }
+            }
+            &_col:nth-child(1){
+                width: 10%;
+            }
+            &_col:nth-child(2){
+                width: 10%;
+            }
+            &_col:nth-child(4){
+                width: 20%;
+            }
+            &_col:nth-child(5){
+                width: 15%;
+            }
+            &_col:nth-child(6){
+                width: 15%;
+            }
+        }
+        &_row:nth-child(2n){
+            background-color: $color-12;
+        }
+       
+    }
+}

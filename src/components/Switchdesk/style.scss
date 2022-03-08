@@ -1,0 +1,127 @@
+@import '../../globalStyle/scss/base.scss';
+@import '../../globalStyle/scss/mixin.scss';
+
+
+.overlay{
+    position: fixed;
+    top: 0;
+    display: block;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #0a0a0a;
+    opacity: 0.8;
+    z-index: 5;
+}
+.Switchdesk{
+    position: fixed;
+    width: 1200px;
+    height: 600px;
+    display: block;
+    background-color: $color-5;
+    z-index: 6;
+    top:  10vh ;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 8px;
+}
+
+.switchdesk-box_title{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+}
+
+.switchdesk-box_title h3{
+    font-size: 1.4rem;
+    color: var(--color-3);
+}
+
+.switchdesk-box_btnBack{
+    background-color: var(--color-3);
+    color: var(--color-5);
+    cursor: pointer;
+    width: 70px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    font-size: 1.4rem;
+}
+.switchdesk-box_btnBack:hover{
+    background-color: var(--color-7);
+}
+
+.switchdesk-box_body{
+    width: 100%;
+    height: 550px;
+    padding: 12px 12px;
+    &_left{
+        width: 25%;
+        height: 100%;
+        display: block;
+        float: left;
+        &_list{
+            list-style: none;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            &_item{
+                width: 100%;
+                height: 55px;
+                &_link{
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    background-color: $color-13;
+                    cursor: pointer;
+                    i{
+                        margin: 12px;
+                        color: $color-5;
+                    }
+                    h3{
+                        color: $color-5;
+                    }
+                    &:hover{
+                        background-color: $color-19;
+                    }
+                    
+                }
+            }
+        }
+    }
+    &_right{
+        padding-left: 8px;
+        width: 75%;
+        height: 100%;
+        display: block;
+        float: right;
+        border: 1px solid $color-12;
+        flex-wrap: wrap;
+        overflow-y: scroll;
+        &_table{
+            width: 125px;
+            height: 60px;
+            background-color: $color-10;
+            margin: 0 8px 12px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 1px 3px 4px rgba($color: #000000, $alpha: 20%);
+            h4{
+                color: $color-13;
+            }
+            &:hover{
+                background-color: $color-19;
+            }
+        }
+    }
+}
+.switchdesk-box_btn-active{
+    background-color: $color-19;
+
+}

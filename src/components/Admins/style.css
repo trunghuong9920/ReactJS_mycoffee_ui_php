@@ -1,0 +1,49 @@
+.admin{
+    margin: 12px 30px;
+}
+.admin-title{
+    border-bottom: 1px solid var(--color-6);
+}
+.admin_body{
+    margin-top: 12px;
+}
+.admin-col_right{
+
+}
+.admin-col_right-list{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.admin-col_right-item{
+    display: block;
+    width: 100%;
+    height: 50px;
+}
+.admin-col_right-tab{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-18);
+    border-bottom: 1px solid var(--color-6);
+    cursor: pointer;
+}
+.admin-col_right-tab_active{
+    background-color: var(--color-19);
+}
+.admin-col_right-tab i, .admin-col_right-tab h3{
+    color: var(--color-15);
+}
+.admin-col_right-tab:hover{
+    background-color: var(--color-19);
+}
+.admin-col_right-tab i{
+    margin-right: 8px;
+}
+.admin-col_right-tab h3{
+    font-size: 1.4rem;
+}
+
+
+/* admin right */

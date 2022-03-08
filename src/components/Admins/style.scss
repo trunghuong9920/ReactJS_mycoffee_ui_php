@@ -1,0 +1,41 @@
+@import "../../globalStyle/scss/base.scss";
+@import "../../globalStyle/scss/mixin.scss";
+
+.colRight {
+    &_header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        &_left h2 {
+            color: $color-11;
+            font-size: 1.4rem;
+        }
+        &_right {
+            display: flex;
+            &_search {
+                flex: 1;
+                border: 1px solid $color-12;
+                border-radius: 4px;
+                margin-right: 22px;
+                button {
+                    @include btnEdit();
+                    border-top-right-radius: 4px;
+                    border-bottom-right-radius: 4px;
+                }
+                input {
+                    padding: 0 8px;
+                    color: $color-11;
+                    height: 100%;
+                }
+            }
+            &_add {
+                @include btnEdit();
+                border-radius: 4px;
+            }
+        }
+    }
+    &_body{
+        border: 1px solid $color-12;
+        margin-top: 12px;
+    }
+}

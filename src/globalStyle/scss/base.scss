@@ -1,0 +1,225 @@
+@import './mixin.scss';
+
+$color-1: #707070;
+$color-2: #c7c4c4;
+$color-3: #e08956;
+$color-4: #8d8a8a;
+$color-5: #fff;
+$color-6: #ddd8d8;
+$color-7: rgb(214, 52, 52);
+$color-8: #f0eeee;
+$color-9: rgb(240, 240, 122);
+$color-10: rgb(240, 212, 122);
+$color-11: #443d3d;
+$color-12: #e6e0e0;
+$color-13: rgb(199, 49, 12);
+$color-14: rgb(207, 123, 28);
+$color-15: #f5f5f5;
+$color-16: #6260dd;
+$color-17: #a7fc96;
+$color-18: #3a4651;
+$color-19: #85ce36;
+$header-height: 60px;
+$header-bar: 30px;
+$background-color: #e2e2e5;
+$box-main: white;
+$box-color-children: #474a59;
+$text-color-1: rgb(134, 93, 209);
+$text-color-2: #dd7373;
+$text-color-3: #fff;
+
+
+@keyframes slideIn {
+    from{
+        transform: translateY( calc( -100% - 65px ) );
+        opacity: 0;
+    }
+    to{
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+// paginate
+
+.paginate{
+    width: 100%;
+    margin: 24px 0;
+    &_list{
+        display: flex;
+        list-style: none;
+        align-items: center;
+        margin: 0 auto;
+        justify-content: center;
+        &_item{
+            margin: 0 12px;
+            width: 25px;
+            height: 25px;
+            
+        }
+        &_link{
+            width: 100%;
+            height: 100%;
+            display: block;
+            background-color: $color-6;
+            border-radius: 4px;
+            cursor: pointer;
+            &-active{
+                background-color: $color-17;
+            }
+            &:hover{
+                background-color: $color-17;
+            }
+            span{
+                font-size: 1.4rem;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: $color-11;
+            }
+        }
+    }
+}
+
+//modal
+.modal{
+    width: 700px;
+    min-height: 50px;
+    background-color: $color-5;
+    border: 1px solid $color-2;
+    box-shadow: 0 2px 12px rgb(0, 0, 0, 20%);
+    border-radius: 12px;
+    position: fixed;
+    top: 60px;
+    left: 30%;
+    animation: slideIn linear .3s;
+
+    &_header{
+        padding: 12px;
+        border-bottom: 1px solid $color-2;
+        h1{
+            margin: 0;
+            text-align: center;
+            font-size: 1.6rem;
+            color: $color-11;
+        }
+    }
+    &_body{
+        padding: 12px;
+        .form_group{
+            &_title{
+                color: $color-11;
+            }
+            &_input{
+                width: 60%;
+                border-bottom: 1px solid $color-2;
+            }
+            img{
+                width: 60px;
+                height: 60px;
+                margin-bottom: 6px;
+            }
+            select{
+                cursor: pointer;
+            }
+            &_imgsrc{
+                display: flex;
+                &_upfile{
+                    margin-left: 12px;
+                    padding: 6px;
+                    font-size: 1.4rem;
+                    @include btnEdit();
+                    i{
+                        margin-right: 4px;
+                    }
+                }
+                &_reloadimg{
+                    margin-left: 12px;
+                    @include btnEdit();
+                    i{
+                        margin-right: 4px;
+                    }
+                }
+            }
+        }
+    }
+    &_footer{
+        width: 100%;
+        padding: 12px;
+        margin-top: 22px;
+        border-top: 1px solid $color-2;
+        display: flex;
+        align-items: center;
+        &_groupbtn{
+            display: flex;
+            float: right;
+            padding-bottom: 12px;
+            button{
+                @include btnEdit();
+                margin: 0 8px;
+            }
+        }
+        &_error{
+            flex: 1;
+            h3{
+                margin: 0 4px;
+                color:  $color-14;
+            }
+        }
+    }
+
+}
+//modal delete
+.deleteValue{
+    color: $color-14;
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+
+//status form
+.statusForm{
+    display: block;
+    width: 30px;
+    height: 50px;
+    border: 1px solid $color-2;
+    background-color: $color-17;
+    margin: auto;
+    margin-top: 4px;
+    &-lock{
+        display: block;
+        width: 100%;
+        height: 50%;
+        position: relative;
+        cursor: pointer;
+        i{  
+            position: absolute;
+            font-size: 1.4rem;
+            top: 40%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: 500;
+        }
+    }
+    &-unlock{
+        display: block;
+        width: 100%;
+        height: 50%;
+        position: relative;
+        cursor: pointer;
+        i{
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.4rem;
+            font-weight: 500;
+        }
+    }
+    &_activeUnlock{
+        background-color: #cf7b1c;
+    }
+}

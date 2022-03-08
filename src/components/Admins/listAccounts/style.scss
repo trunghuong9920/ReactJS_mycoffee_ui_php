@@ -1,0 +1,61 @@
+@import "../../../globalStyle/scss/base.scss";
+@import "../../../globalStyle/scss/mixin.scss";
+
+.ListAccout{
+    &_category{
+        display: flex;
+        height: 60px;
+        &_col{
+            width:20%;
+            border-right: 2px solid $color-5;
+            h3{
+               text-align: center;
+            }
+            &-control{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+                &-edit, &-delete{
+                    margin: 0 12px;
+                    cursor: pointer;
+                    @include btnEdit();
+                }
+            }
+            img{
+                height: 100%;
+                width: auto;
+                margin: 0 auto;
+                display: block;
+            }
+        }
+        &_col:nth-child(1){
+            width: 5%;
+        }
+        &_col:nth-child(2){
+            width: 10%;
+        }
+        &_col:nth-child(6){
+            width: 10%;
+        }
+        &_col:nth-child(7){
+            width: 5%;
+        }
+        &_col:nth-child(8){
+            width: 10%;
+        }
+        &-active{
+            background-color: $color-10;
+        }
+    }
+}
+.ListAccout_category_body{
+    .ListAccout_category:nth-child(2n){
+        background-color: $color-8;
+    }
+
+}
+.ListAccount_body_col_value{
+    font-size: 1.4rem;
+    color: $color-13;
+}

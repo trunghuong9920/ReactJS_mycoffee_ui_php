@@ -1,0 +1,56 @@
+@import "../../globalStyle/scss/base.scss";
+@import "../../globalStyle/scss/mixin.scss";
+
+
+.info{
+    width: 800px;
+    min-height: 80vh;
+    margin: 0 auto;
+    &_body{
+        border: 1px solid $color-6;
+        padding: 22px 12px;
+        padding-bottom: 50px;
+    }
+    
+}
+
+.editInfo{
+    width: 100%;
+    margin-top: 24px;
+    &_group{
+        border-top: 1px solid $color-12;
+        margin-top: 22px;
+        
+        &_title{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            h2{
+                color: $color-11;
+            }
+            &_edit{
+                button{
+                    @include btnEditInfo();
+                }
+                div{
+                    display: flex;
+                    align-items: center;
+                }
+            }
+        }
+        &_body{
+            &_form{
+                input{
+                    width: 60%;
+                    font-weight: 600;
+                    font-size: 1.4rem;
+                    color: $color-1;
+                    border-bottom: 1px solid $color-12;
+                }
+                &_editpassword{
+                    margin-bottom: 12px;
+                }
+            }
+        }
+    }
+}
