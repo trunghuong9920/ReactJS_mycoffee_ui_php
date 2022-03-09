@@ -119,7 +119,7 @@ function ListAccount() {
     //Load data
     useEffect(() => {
         if (search === '') {
-            const api = port + '/users'
+            const api = port + '/users/getalldata'
             fetch(api)
                 .then(res => res.json())
                 .then(data => {
@@ -127,12 +127,10 @@ function ListAccount() {
                 })
         }
         else {
-            const api = port + '/searchusers'
-            const formData = new FormData()
-            formData.append('qsearch', search)
+            const api = port + '/search/user?qsearch='+search
+           
             const options = {
-                method: "POST",
-                body: formData
+                method: "GET"
             }
             fetch(api, options)
                 .then(res => res.json())

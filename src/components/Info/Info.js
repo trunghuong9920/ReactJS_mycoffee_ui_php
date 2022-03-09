@@ -11,9 +11,8 @@ function Info() {
     const { editData } = ApiController()
     const [data, setData] = useState([])
     const getAccount = localStorage.getItem("idaccount")
-    const formData = new FormData()
-    formData.append('id', getAccount)
-    const api = port + "/info"
+  
+    const api = port + "/info?id="+getAccount
 
     const [id, setId] = useState('')
     const [avata, setAvata] = useState('')
@@ -29,8 +28,7 @@ function Info() {
 
     useEffect(() => {
         const options = {
-            method: "POST",
-            body: formData
+            method: "GET"
         }
         fetch(api, options)
             .then(res => res.json())

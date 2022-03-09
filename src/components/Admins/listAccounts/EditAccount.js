@@ -6,58 +6,62 @@ import nobody from '../../../images/nobody_m.256x256.jpg'
 import ApiController from '../../../services/apiController'
 import AccountController from './AccountController'
 
-function EditAccount({ idEdit , handleEdit, handleReloadForEdit }) {
+function EditAccount({ idEdit, handleEdit, handleReloadForEdit }) {
     const port = config()
-    const {create, editData} = ApiController()
-    const {CheckInfo,CheckInfoEdit} = AccountController()
+    const { create, editData } = ApiController()
+    const { CheckInfo, CheckInfoEdit } = AccountController()
     const id = idEdit
     const [avata, setAvata] = useState('')
     const [dataEdit, setDataEdit] = useState([])
     const [getImgSrc, setGetImgSrc] = useState()
-    const [permission, setPermission] = useState('Quản Lý')
+    const [permission, setPermission] = useState(0)
     const [account, setAccount] = useState('')
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
     const [error, setError] = useState('')
-    const [password, setPassword] = useState('')
-    const [convertPermission, setConvertPermis]= useState()
+    const [errorAccount, setErrorAccount] = useState('')
+    const [dataAccount, setDataAccount] = useState([])
+    const [errorPhone, setErrorPhone] = useState('')
 
     const handleGetValueSelect = (e) => {
-        if (e.target.value === '1') {
-            setPermission("Nhân viên")
-            setConvertPermis('1')
-        }
-        else {
-            setPermission("Quản lý")
-            setConvertPermis('0')
-        }
+        setPermission(e.target.value)
     }
 
-    const handleSaveEdit = () =>{
-        if(CheckInfoEdit(account,name,phone))
-        {
-            const formData = {
-                account:account,
-                name:name,
-                phone:phone,
-                avata:getImgSrc,
-                permission:permission,
-                password:password
+    const handleSaveEdit = () => {
+        if (CheckInfoEdit(account, name, phone) && errorPhone === '' && errorAccount === '') {
+            const formDt = {
+                account: account,
+                name: name,
+                phone: phone,
+                avata: getImgSrc,
+                permission: permission
             }
-            const api = port + "/users/"+id
+            const api = port + "/users/updateuser"
+            const formData = new FormData()
+            formData.append('id', id)
+            formData.append('account', account.replace(/\s+/g, ''))
+            formData.append('name', name)
+            formData.append('phone', phone)
+            formData.append('avata', getImgSrc)
+            formData.append('permission', permission)            
+
             editData(api, formData)
-            handleReloadForEdit(id,formData)
+            handleReloadForEdit(id, formDt)
             handleEdit()
         }
-        else{
+        else {
             setError("Vui lòng nhập đủ thông tin!")
         }
     }
 
     //load data
     useEffect(() => {
-        const api = port + "/users?id=" + id
-        fetch(api)
+        const api = port + '/users/edituser?id='+id
+       
+        const options = {
+            method: "GET"
+        }
+        fetch(api, options)
             .then(res => res.json())
             .then(data => {
                 setDataEdit(data)
@@ -66,17 +70,68 @@ function EditAccount({ idEdit , handleEdit, handleReloadForEdit }) {
                     setAccount(item.account)
                     setName(item.name)
                     setPhone(item.phone)
-                    setPassword(item.password)
                     setPermission(item.permission)
-                    if(item.permission === "Quản lý"){
-                        setConvertPermis('0')
-                    }
-                    if(item.permission === "Nhân viên"){
-                        setConvertPermis('1')
-                    }
                 });
             })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }, [])
+
+    useEffect(() => {
+        const api = port + '/users/getaccount'
+        fetch(api)
+            .then(res => res.json())
+            .then(data => {
+                setDataAccount(data)
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }, [])
+
+    function checkCoincidentAccount(e) {
+        let count = 0
+        dataAccount.map(item => {
+            if (item.account === e.target.value.replace(/\s+/g, '')) {
+                count += 1
+            }
+        })
+        if (count > 0) {
+            return false
+        }
+        return true
+    }
+    const handleCheckAccount = (e) => {
+        setAccount(e.target.value)
+        if (checkCoincidentAccount(e)) {
+            setErrorAccount("")
+        }
+        else {
+            setErrorAccount("Tài khoản đã được sử dụng!")
+        }
+    }
+
+    const handleCheckPhone = (e) => {
+        setPhone(e.target.value)
+        if (is_phonenumber(e.target.value)) {
+            setErrorPhone('')
+        }
+        else {
+            setErrorPhone('Số điện thoại không đúng!')
+        }
+    }
+
+
+    function is_phonenumber(phonenumber) {
+        const phoneno = /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;
+        if (phonenumber.match(phoneno)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
     useEffect(() => {
         return () => {
@@ -128,7 +183,7 @@ function EditAccount({ idEdit , handleEdit, handleReloadForEdit }) {
                             <div className="form_group">
                                 <h3 className="form_group_title">Mã nhân viên:</h3>
                                 <input className="form_group_input"
-                                    defaultValue={item.id}
+                                    defaultValue={id}
                                     readOnly={true}
                                 />
                             </div>
@@ -137,15 +192,16 @@ function EditAccount({ idEdit , handleEdit, handleReloadForEdit }) {
                                 <input className="form_group_input"
                                     placeholder='Nhập thông tin tài khoản...'
                                     defaultValue={item.account}
-                                    onChange = {e => setAccount(e.target.value)}
+                                    onChange={handleCheckAccount}
                                 />
+                                <p className='form_group-error'>{errorAccount}</p>
                             </div>
                             <div className="form_group">
                                 <h3 className="form_group_title">Tên nhân viên:</h3>
                                 <input className="form_group_input"
                                     placeholder='Nhập thông tin nhân viên...'
                                     defaultValue={item.name}
-                                    onChange = {e => setName(e.target.value)}
+                                    onChange={e => setName(e.target.value)}
                                 />
                             </div>
                             <div className="form_group">
@@ -153,13 +209,14 @@ function EditAccount({ idEdit , handleEdit, handleReloadForEdit }) {
                                 <input className="form_group_input"
                                     placeholder='Vui lòng nhập chữ số...'
                                     defaultValue={item.phone}
-                                    onChange = {e => setPhone(e.target.value)}
+                                    onChange={handleCheckPhone}
                                 />
+                                <p className='form_group-error'>{errorPhone}</p>
                             </div>
                             <div className="form_group">
                                 <h3 className="form_group_title">Quyền truy cập:</h3>
                                 <select
-                                    value= {convertPermission}
+                                    value={permission}
                                     onChange={handleGetValueSelect}
                                 >
                                     <option value="0">Quản lý</option>

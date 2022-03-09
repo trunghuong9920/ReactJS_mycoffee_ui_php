@@ -22,6 +22,7 @@ function AddAccount({ hide, handleReloadForAdd }) {
     const [errorConfirmPass, setErrorConfirmPass] = useState('')
     const [errorPhone, setErrorPhone] = useState('')
     const [errorAccount, setErrorAccount] = useState('')
+    const [dataAccount, setDataAccount] = useState([])
 
     const handleGetValueSelect = (e) => {
         setPermission(e.target.value)
@@ -48,7 +49,7 @@ function AddAccount({ hide, handleReloadForAdd }) {
             formData.append('permission', permission)
             formData.append('password', password.replace(/\s+/g, ''))
 
-            const api = port + "/users"
+            const api = port + "/users/adduser"
             create(api, formData)
             handleReloadForAdd(formDt)
             hide();
@@ -80,29 +81,39 @@ function AddAccount({ hide, handleReloadForAdd }) {
         setAvata('')
     }
 
-    const handleCheckAccount = (e) => {
-        setAccount(e.target.value)
-        const api = port + '/getaccount'
-
-        const formData = new FormData()
-        formData.append('account', e.target.value.replace(/\s+/g, ''))
-        const options = {
-            method: "POST",
-            body: formData
-        }
-        fetch(api, options)
+    useEffect(()=>{
+        const api = port + '/users/getaccount'
+        fetch(api)
             .then(res => res.json())
             .then(data => {
-                if (data.length > 0) {
-                    setErrorAccount("Tài khoản bị trùng!")
-                }
-                else {
-                    setErrorAccount("")
-                }
+                setDataAccount(data)
             })
             .catch(error => {
                 console.error('Error:', error);
             });
+    }, [])
+
+    function checkCoincidentAccount(e){
+        let count = 0
+        dataAccount.map(item =>{
+            if(item.account === e.target.value.replace(/\s+/g, '')){
+                count +=1
+            }
+        })
+        if(count > 0){
+            return false 
+        }
+        return true
+    }
+
+    const handleCheckAccount = (e) => {
+        setAccount(e.target.value)
+        if(checkCoincidentAccount(e)){
+            setErrorAccount("")
+        }
+        else{
+            setErrorAccount("Tài khoản đã được sử dụng!")
+        }
     }
 
     const handleCheckPhone = (e) => {

@@ -23,13 +23,11 @@ function Header(){
         activeAdmin = true
     }
     const getAccount = localStorage.getItem("idaccount")
-    const formData = new FormData()
-    formData.append('id', getAccount)
-    const api = port + "/info"
+   
+    const api = port + "/info?id="+getAccount
     useEffect(() =>{
         const options = {
-            method: "POST",
-            body: formData
+            method: "GET"
         }
         fetch(api, options)
             .then(res => res.json())

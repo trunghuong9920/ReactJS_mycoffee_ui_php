@@ -122,12 +122,10 @@ function ListProduct() {
                 })
         }
         else {
-            const api = port + '/searchproducts'
-            const formData = new FormData()
-            formData.append('qsearch', search)
+            const api = port + '/search/products?qsearch='+search
+
             const options = {
-                method: "POST",
-                body: formData
+                method: "GET"
             }
             fetch(api, options)
                 .then(res => res.json())

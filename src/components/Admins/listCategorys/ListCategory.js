@@ -134,12 +134,10 @@ function ListCategory() {
                 })
         }
         else{
-            const api = port + '/searchcate'
-            const formData = new FormData()
-            formData.append('qsearch', search)
+            const api = port + '/search/categorys?qsearch='+search
+           
             const options = {
-                method: "POST",
-                body: formData
+                method: "GET"
             }
             fetch(api, options)
                 .then(res => res.json())

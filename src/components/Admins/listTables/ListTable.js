@@ -120,12 +120,10 @@ function ListTable() {
                 })
         }
         else{
-            const api = port + '/searchtables'
-            const formData = new FormData()
-            formData.append('qsearch', search)
+            const api = port + '/search/tables?qsearch='+search
+         
             const options = {
-                method: "POST",
-                body: formData
+                method: "GET"
             }
             fetch(api, options)
                 .then(res => res.json())

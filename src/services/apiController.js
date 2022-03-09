@@ -15,16 +15,12 @@ function ApiController() {
 
     const editData = (api, formData) => {
         const options = {
-            method: "PUT",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-
+            method: "POST",
+            body: formData
         }
         fetch(api, options)
             .then(res => res.json())
-            .then(datas => {
+            .then(data => {
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -32,10 +28,7 @@ function ApiController() {
     }
     const deleteData = (api, id) => {
         const options = {
-            method: "DELETE",
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            method: "DELETE"
         }
         fetch(api + '/' + id, options)
             .then(res => res.json())
