@@ -1,8 +1,10 @@
 function ApiController() {
-    const create = (api) => {
-        fetch(api, {
-            method: "POST"
-        })
+    const create = (api, formData) => {
+        const options = {
+            method: "POST",
+            body: formData
+        }
+        fetch(api, options)
             .then(res => res.json())
             .then(data => {
             })

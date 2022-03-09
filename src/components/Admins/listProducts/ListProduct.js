@@ -122,14 +122,21 @@ function ListProduct() {
                 })
         }
         else {
-            const api = port + '/searchproducts/'+ search
-            fetch(api, {
-                method: "POST"
-            })
+            const api = port + '/searchproducts'
+            const formData = new FormData()
+            formData.append('qsearch', search)
+            const options = {
+                method: "POST",
+                body: formData
+            }
+            fetch(api, options)
                 .then(res => res.json())
                 .then(data => {
-                    setGetData(data)
+                   setGetData(data)
                 })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
     }, [search])
 

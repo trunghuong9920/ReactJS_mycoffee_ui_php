@@ -8,61 +8,65 @@ import config from '../../_config'
 function Login() {
     const navigate = useNavigate();
     const port = config()
-    const [name, setName] = useState('')
+    const [account, setAccount] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
-    const [data, setData]= useState([])
+    const [data, setData] = useState([])
 
-    function checkInfo(name, password) {
-        if (name === '') return false
+    function checkInfo(account, password) {
+        if (account === '') return false
         if (password === '') return false
         return true
     }
 
-    useEffect(()=>{
-        if(data.length >0){
-            data.map(item=>{
-                if(item.status == 1){
+    useEffect(() => {
+        if (data.length > 0) {
+            data.map(item => {
+                if (item.status == 1) {
                     setError("Tài khoản đã bị khóa!")
                 }
-                if(item.status == 0){
+                if (item.status == 0) {
                     localStorage.setItem("idaccount", item.id)
                     navigate('/')
                 }
             })
         }
-        else{
-            if(checkInfo(name, password)){
-            setError("Thông tin tài khoản hoặc mật khẩu không chính xác!")
+        else {
+            if (checkInfo(account, password)) {
+                setError("Thông tin tài khoản hoặc mật khẩu không chính xác!")
 
             }
         }
     }, [data])
 
     const handleLogin = () => {
-        if(checkInfo(name, password)){
+        if (checkInfo(account, password)) {
             setError("")
-            const api = port +"/login/"+name+"/" + password
-            create(api)
-            
+            const api = port + "/login"
+            const formData = new FormData()
+            formData.append('account', account)
+            formData.append('password', password)
+
+            getAccount(api, formData)
         }
-        else{
+        else {
             setError("Vui lòng nhập đầy đủ thông tin!")
         }
 
     }
-
-    const create = (api) => {
-        fetch(api, {
-            method: "POST"
-        })
-        .then(res =>{
-            res.text()
-            .then(_data =>{
-                const data = JSON.parse(_data);
-                setData(data);
+    function getAccount(api, formData) {
+        const options = {
+            method: "POST",
+            body: formData
+        }
+        fetch(api, options)
+            .then(res => res.json())
+            .then(data => {
+                setData(data)
             })
-        })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }
 
     return (
@@ -77,8 +81,8 @@ function Login() {
                         <div className='box-right_inputgroup'>
                             <label><FontAwesomeIcon icon="fa-solid fa-user" /></label>
                             <input placeholder='Nhập vào tài khoản... '
-                                value={name}
-                                onChange={e => setName(e.target.value)}
+                                value={account}
+                                onChange={e => setAccount(e.target.value)}
                             />
                         </div>
                         <div className='box-right_inputgroup'>
@@ -89,7 +93,7 @@ function Login() {
                                 onChange={e => setPassword(e.target.value)}
                             />
                         </div>
-                       
+
                         <p className='box-right_error'>{error}</p>
                         <button className='btn-login' type='button' onClick={handleLogin}>Đăng nhập</button>
 

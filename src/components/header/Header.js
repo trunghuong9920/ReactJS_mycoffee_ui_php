@@ -23,22 +23,26 @@ function Header(){
         activeAdmin = true
     }
     const getAccount = localStorage.getItem("idaccount")
-    const api = port + "/info/" + getAccount
+    const formData = new FormData()
+    formData.append('id', getAccount)
+    const api = port + "/info"
     useEffect(() =>{
-        fetch(api, {
-            method: "POST"
-        })
-        .then(res =>{
-            res.text()
-            .then(_data =>{
-                const data = JSON.parse(_data);
+        const options = {
+            method: "POST",
+            body: formData
+        }
+        fetch(api, options)
+            .then(res => res.json())
+            .then(data => {
                 data.map(item =>{
                     setAvata(item.avata)
                     setName(item.name)
                     setPermission(item.permission)
                 })
             })
-        })
+            .catch(error => {
+                console.error('Error:', error);
+            });
       }, [])
     return(
         <div className='header-main'

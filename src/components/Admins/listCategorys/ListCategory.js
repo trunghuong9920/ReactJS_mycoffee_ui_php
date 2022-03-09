@@ -134,14 +134,21 @@ function ListCategory() {
                 })
         }
         else{
-            const api = port + '/searchcate/'+search
-            fetch(api, {
-                method: "POST"
-            })
+            const api = port + '/searchcate'
+            const formData = new FormData()
+            formData.append('qsearch', search)
+            const options = {
+                method: "POST",
+                body: formData
+            }
+            fetch(api, options)
                 .then(res => res.json())
                 .then(data => {
-                    setGetData(data)
+                   setGetData(data)
                 })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
     }, [search])
 

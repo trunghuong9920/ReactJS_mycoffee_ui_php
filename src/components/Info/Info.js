@@ -8,10 +8,12 @@ import ApiController from '../../services/apiController'
 
 function Info() {
     const port = config()
-    const {editData} = ApiController()
+    const { editData } = ApiController()
     const [data, setData] = useState([])
     const getAccount = localStorage.getItem("idaccount")
-    const api = port + "/info/" + getAccount
+    const formData = new FormData()
+    formData.append('id', getAccount)
+    const api = port + "/info"
 
     const [id, setId] = useState('')
     const [avata, setAvata] = useState('')
@@ -26,9 +28,11 @@ function Info() {
     const [errorPass, setErrorPass] = useState('')
 
     useEffect(() => {
-        fetch(api, {
-            method: "POST"
-        })
+        const options = {
+            method: "POST",
+            body: formData
+        }
+        fetch(api, options)
             .then(res => res.json())
             .then(data => {
                 setData(data)
@@ -42,6 +46,9 @@ function Info() {
                     setPermission(item.permission)
                 })
             })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }, [])
 
     const [editAccount, setEditAccount] = useState(false)
@@ -98,28 +105,28 @@ function Info() {
             setOldPass(item.password)
         })
     }
-    const handleSaveAvataToData = (urlAvata) =>{
+    const handleSaveAvataToData = (urlAvata) => {
         setAvata(urlAvata)
         const formData = {
-            account:account,
-            name:name,
-            phone:phone,
-            avata:urlAvata,
-            permission:permission,
-            password:oldPass
+            account: account,
+            name: name,
+            phone: phone,
+            avata: urlAvata,
+            permission: permission,
+            password: oldPass
         }
         const api = port + "/users/" + id
         editData(api, formData)
     }
     const handleSaveAccount = () => {
-        if(account !== ''){
+        if (account !== '') {
             const formData = {
-                account:account,
-                name:name,
-                phone:phone,
-                avata:avata,
-                permission:permission,
-                password:oldPass
+                account: account,
+                name: name,
+                phone: phone,
+                avata: avata,
+                permission: permission,
+                password: oldPass
             }
             const api = port + "/users/" + id
             editData(api, formData)
@@ -127,46 +134,46 @@ function Info() {
             setErrorAccount("")
             setEditAccount(!editAccount)
         }
-        else{
+        else {
             setErrorAccount("Vui lòng nhập tên tài khoản!")
         }
     }
-    
+
     const handleSaveName = () => {
-        if(name !== ''){
+        if (name !== '') {
             const formData = {
-                account:account,
-                name:name,
-                phone:phone,
-                avata:avata,
-                permission:permission,
-                password:oldPass
+                account: account,
+                name: name,
+                phone: phone,
+                avata: avata,
+                permission: permission,
+                password: oldPass
             }
             const api = port + "/users/" + id
             editData(api, formData)
             setErrorName("")
             setEditName(!editName)
         }
-        else{
+        else {
             setErrorName("Vui lòng nhập họ tên!")
         }
     }
     const handleSavePhone = () => {
-        if(phone !== ''){
+        if (phone !== '') {
             const formData = {
-                account:account,
-                name:name,
-                phone:phone,
-                avata:avata,
-                permission:permission,
-                password:oldPass
+                account: account,
+                name: name,
+                phone: phone,
+                avata: avata,
+                permission: permission,
+                password: oldPass
             }
             const api = port + "/users/" + id
             editData(api, formData)
             setErrorPhone("")
             setEditPhone(!editPhone)
         }
-        else{
+        else {
             setErrorPhone("Vui lòng nhập số điên thoại là các chữ số!")
         }
     }
@@ -192,7 +199,7 @@ function Info() {
                         apiSrc={avata}
 
                         idStaff={id}
-                        handleSaveAvataToData = {handleSaveAvataToData}
+                        handleSaveAvataToData={handleSaveAvataToData}
                     />
 
                 </div>
@@ -236,7 +243,7 @@ function Info() {
                                 <input
                                     readOnly={!editAccount}
                                     value={account}
-                                    ref = {targetInputAc}
+                                    ref={targetInputAc}
                                     onChange={e => setAccount(e.target.value)}
                                 />
 
@@ -284,7 +291,7 @@ function Info() {
                                 <input
                                     readOnly={!editName}
                                     value={name}
-                                    ref = {targetInputName}
+                                    ref={targetInputName}
                                     onChange={e => setName(e.target.value)}
                                 />
                             </div>
@@ -329,7 +336,7 @@ function Info() {
                                 <input
                                     readOnly={!editPhone}
                                     value={phone}
-                                    ref = {targetInputPhone}
+                                    ref={targetInputPhone}
                                     onChange={e => setPhone(e.target.value)}
                                 />
                             </div>
@@ -377,7 +384,7 @@ function Info() {
                                     type={
                                         editPassword ? 'text' : 'password'
                                     }
-                                    ref = {targetInputPass}
+                                    ref={targetInputPass}
                                     placeholder={
                                         editPassword ? 'Mật khẩu cũ' : ''
                                     }

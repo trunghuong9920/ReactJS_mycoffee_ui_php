@@ -85,7 +85,7 @@ function ListAccount() {
     const handleReloadForAdd = (formData) => {
         const data = [...getData]
         const newData = {
-            id: parseInt(lastItem.id)+1,
+            id: parseInt(lastItem.id) + 1,
             account: formData.account,
             name: formData.name,
             phone: formData.phone,
@@ -127,14 +127,21 @@ function ListAccount() {
                 })
         }
         else {
-            const api = port + '/searchusers/' + search
-            fetch(api, {
-                method: "POST"
-            })
+            const api = port + '/searchusers'
+            const formData = new FormData()
+            formData.append('qsearch', search)
+            const options = {
+                method: "POST",
+                body: formData
+            }
+            fetch(api, options)
                 .then(res => res.json())
                 .then(data => {
-                    setGetData(data)
+                   setGetData(data)
                 })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
     }, [search])
 
