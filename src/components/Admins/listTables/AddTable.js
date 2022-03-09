@@ -10,30 +10,25 @@ function AddTable({hide , handleReloadForAdd}) {
     const port = config()
     const {checkTable} = TableController()
     const [name, setName]  = useState('')
-    const [area, setArea] = useState('Ngoài sân')
+    const [area, setArea] = useState(0)
     const [error, setError] = useState('')
     const handleGetArea = (e) =>{
-        if(e.target.value === '0'){
-            setArea("Ngoài sân")
-        }
-        if(e.target.value === '1'){
-            setArea("Tầng 1")
-        }
-        if(e.target.value === '2'){
-            setArea("Tầng 2")
-        }
+        setArea(e.target.value)
     }
 
     const handleSaveTable = () =>{
         if(checkTable(name)){
-            const formData = {
+            const formDt = {
                 name:name,
-                status: "Trống",
+                status: 0,
                 area:area
             }
             const api = port + "/tables"
+            const formData = new FormData()
+            formData.append('name', name)
+            formData.append('area', area)
             create(api,formData)
-            handleReloadForAdd(formData)
+            handleReloadForAdd(formDt)
             hide()
         }
         else{

@@ -85,7 +85,7 @@ function ListCategory() {
     const handleReloadForAdd = (formData) => {
         const data = [...getData]
         const newData = {
-            id: lastItem.id + 1,
+            id: parseInt(lastItem.id) + 1,
             name: formData.name,
         }
         data.push(newData)

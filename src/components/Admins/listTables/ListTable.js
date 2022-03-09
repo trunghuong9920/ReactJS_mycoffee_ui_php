@@ -67,7 +67,7 @@ function ListTable() {
     const handleReloadForAdd = (formData) => {
         const data = [...getData]
         const newData = {
-            id: lastItem.id + 1,
+            id: parseInt(lastItem.id) + 1,
             name: formData.name,
             status: formData.status,
             area: formData.area

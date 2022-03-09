@@ -6,52 +6,63 @@ import ApiController from '../../../services/apiController'
 import ProductController from './ProductController'
 import nobody from '../../../images/nodrink.jpg'
 
-function AddProduct({hide, handleReloadForAdd}) {
+function AddProduct({ hide, handleReloadForAdd }) {
     const port = config()
     const [urlImg, setUrlImg] = useState('')
     const [avata, setAvata] = useState('')
-    const {CheckInfo} = ProductController()
-    const {create} = ApiController()
+    const { CheckInfo } = ProductController()
+    const { create } = ApiController()
     const [cates, setCates] = useState([])
     const [nameP, setNameP] = useState('')
-    const [nameC, setNameC] = useState('Cà phê truyền thống')
-    const [idC, setIdC] = useState(1)
+    const [nameC, setNameC] = useState('')
+    const [idC, setIdC] = useState('')
     const [price, setPrice] = useState('')
     const [error, setError] = useState('')
+    const [errorPrice, setErrorPrice] = useState('')
 
 
-    const handleGetProduct = (e) =>{
+    const handleGetProduct = (e) => {
         setIdC(e.target.value)
         cates.map(item => {
-            if(parseInt(e.target.value) === item.id){
+            if (parseInt(e.target.value) === item.id) {
                 setNameC(item.name);
             }
         })
     }
-    const handleSave  = () =>{
-        if(CheckInfo(nameP, price)){
-            const formData = {
-                nameC:nameC,
-                idc:idC,
-                img:urlImg,
-                name:nameP,
-                price:price
+    const handleSave = () => {
+        if (CheckInfo(nameP, price) && errorPrice === '') {
+            const formDt = {
+                nameC: nameC,
+                idc: idC,
+                img: urlImg,
+                name: nameP,
+                price: price
             }
             const api = port + "/products"
-            handleReloadForAdd(formData)
+           
+            const formData = new FormData()
+            formData.append('idc', idC)
+            formData.append('name', nameP)
+            formData.append('img', urlImg)
+            formData.append('price', price)
+
+
+            handleReloadForAdd(formDt)
             create(api, formData)
             hide()
         }
-        else{
+        else {
             setError("Vui lòng nhập đầy đủ thông tin!")
         }
     }
     useEffect(() => {
-        const api = "http://localhost:3000/categorys"
+        const api = port + "/categorys"
         fetch(api)
             .then(res => res.json())
             .then(data => {
                 setCates(data)
+                setNameC(data[0].name)
+                setIdC(data[0].id)
             })
     }, [])
 
@@ -75,6 +86,23 @@ function AddProduct({hide, handleReloadForAdd}) {
     const handleReloadImg = () => {
         setUrlImg('')
         setAvata('')
+    }
+    function checkNumber(value) {
+        var regex = /^[0-9]+$/;
+        if (value.match(regex)) {
+            return true
+        }
+        return false
+    }
+
+    const handleGetPrice = (e) => {
+        setPrice(e.target.value)
+        if(checkNumber(e.target.value)){
+            setErrorPrice("")
+        }
+        else{
+            setErrorPrice("Giá sản phẩm là các chữ số!")
+        }
     }
     return (
         <>
@@ -105,7 +133,7 @@ function AddProduct({hide, handleReloadForAdd}) {
                     <input className="form_group_input"
                         placeholder='Chèn thông tin...'
                         value={nameP}
-                        onChange= {e => setNameP(e.target.value)}
+                        onChange={e => setNameP(e.target.value)}
                     />
                 </div>
                 <div className="form_group">
@@ -126,8 +154,9 @@ function AddProduct({hide, handleReloadForAdd}) {
                     <input className="form_group_input"
                         placeholder='Vui lòng nhập số...'
                         value={price}
-                        onChange = {e => setPrice(e.target.value)}
+                        onChange={handleGetPrice}
                     />
+                    <p className='form_group-error'>{errorPrice}</p>
                 </div>
             </div>
             <div className="modal_footer">

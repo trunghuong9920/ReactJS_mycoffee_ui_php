@@ -31,36 +31,27 @@ function AddAccount({ hide, handleReloadForAdd }) {
     //add
 
     const handleSaveAccount = () => {
-        if (CheckInfo(account, name, phone, password, confirmPass) && errorPhone === '' && errorConfirmPass === '') {
-            if (urlImg === '') {
-                const newUrl = 'a'
-                const formData = {
-                    account: account.replace(/\s+/g, ''),
-                    name: name,
-                    phone: phone,
-                    avata: newUrl,
-                    permission: permission,
-                    status: 0
-                }
-                const api = port + "/users/" + account.replace(/\s+/g, '') + "/" + name + "/" + phone + "/" + newUrl + "/" + permission + "/" + password.replace(/\s+/g, '')
-                // create(api)
-                handleReloadForAdd(formData)
-                hide();
+        if (CheckInfo(account, name, phone, password, confirmPass) && errorPhone === '' && errorConfirmPass === '' && errorAccount === '') {
+            const formDt = {
+                account: account.replace(/\s+/g, ''),
+                name: name,
+                phone: phone,
+                avata: urlImg,
+                permission: permission,
+                status: 0
             }
-            else {
-                const formData = {
-                    account: account.replace(/\s+/g, ''),
-                    name: name,
-                    phone: phone,
-                    avata: urlImg,
-                    permission: permission,
-                    status: 0
-                }
-                const api = port + "/users/" + account.replace(/\s+/g, '') + "/" + name + "/" + phone + "/" + urlImg + "/" + permission + "/" + password.replace(/\s+/g, '')
-                // create(api)
-                handleReloadForAdd(formData)
-                hide();
-            }
+            const formData = new FormData()
+            formData.append('account', account.replace(/\s+/g, ''))
+            formData.append('name', name)
+            formData.append('phone', phone)
+            formData.append('avata', urlImg)
+            formData.append('permission', permission)
+            formData.append('password', password.replace(/\s+/g, ''))
+
+            const api = port + "/users"
+            create(api, formData)
+            handleReloadForAdd(formDt)
+            hide();
 
         }
         else {
@@ -91,6 +82,27 @@ function AddAccount({ hide, handleReloadForAdd }) {
 
     const handleCheckAccount = (e) => {
         setAccount(e.target.value)
+        const api = port + '/getaccount'
+
+        const formData = new FormData()
+        formData.append('account', e.target.value.replace(/\s+/g, ''))
+        const options = {
+            method: "POST",
+            body: formData
+        }
+        fetch(api, options)
+            .then(res => res.json())
+            .then(data => {
+                if (data.length > 0) {
+                    setErrorAccount("Tài khoản bị trùng!")
+                }
+                else {
+                    setErrorAccount("")
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }
 
     const handleCheckPhone = (e) => {

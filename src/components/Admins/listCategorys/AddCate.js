@@ -16,12 +16,14 @@ function AddCate({hide, handleReloadForAdd}) {
     const handleSaveCate = () => {
         if(CheckInfo(name))
         {
-            const formData = {
+            const formDt = {
                 name:name
             }
-            const Api = port + "/categorys"
-            create(Api, formData)
-            handleReloadForAdd(formData)
+            const api = port + "/categorys"
+            const formData = new FormData()
+            formData.append('name', name)
+            create(api,formData)
+            handleReloadForAdd(formDt)
             hide()
         }
         else{

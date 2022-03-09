@@ -81,10 +81,10 @@ function ListProduct() {
     const handleReloadForAdd = (formData) => {
         const data = [...getData]
         const newData = {
-            id: lastItem.id + 1,
+            id: parseInt(lastItem.id) + 1,
             img: formData.img,
             name: formData.name,
-            nameC: formData.nameC,
+            category: formData.nameC,
             idc: formData.idc,
             price: formData.price
         }
