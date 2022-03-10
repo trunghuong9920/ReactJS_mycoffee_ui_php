@@ -6,6 +6,7 @@ import AddProduct from './AddProduct'
 import EditProduct from './EditProduct'
 import DeleteProduct from './DeleteProduct'
 import config from '../../../_config'
+import nodrink from '../../../images/nodrink.jpg'
 
 function ListProduct() {
     const port = config()
@@ -227,7 +228,7 @@ function ListProduct() {
                                     <div className="product_body_row_col">
                                         <img
                                             className='product_body_row_col_img'
-                                            src={item.img}
+                                            src={item.img || nodrink}
                                         />
                                     </div>
                                     <div className="product_body_row_col">

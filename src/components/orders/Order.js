@@ -11,57 +11,10 @@ import useModal from '../pays/useModal'
 import 'react-toastify/dist/ReactToastify.css';
 import config from '../../_config'
 import ApiController from '../../services/apiController';
+import nodrink from '../../images/nodrink.jpg'
 
 const namelists = ['STT', 'Hình ảnh', 'Tên món', 'Mã món', 'Số lượng', 'Đơn giá (VNĐ)', 'Chiết khấu (%)', 'Giờ vào', 'Thành tiền (VNĐ)', 'Thao tác']
-const products = [
-    {
-        id: '1',
-        name: 'Trà đào cam sả',
-        img: 'https://tinhayvip.com/wp-content/uploads/2022/01/eimi-fukada-khoe-nhan-cuoi-khien-nhieu-anh-em-vun-vo-1.jpg',
-        price: '20000',
-    },
-    {
-        id: '2',
-        name: 'Trà đào',
-        img: 'https://tinhayvip.com/wp-content/uploads/2022/01/eimi-fukada-khoe-nhan-cuoi-khien-nhieu-anh-em-vun-vo-1.jpg',
-        price: '20000',
-    },
-    {
-        id: '3',
-        name: 'Nâu đá',
-        img: 'https://tinhayvip.com/wp-content/uploads/2022/01/eimi-fukada-khoe-nhan-cuoi-khien-nhieu-anh-em-vun-vo-1.jpg',
-        price: '20000',
-    },
-    {
-        id: '4',
-        name: 'Nâu đá',
-        img: 'https://tinhayvip.com/wp-content/uploads/2022/01/eimi-fukada-khoe-nhan-cuoi-khien-nhieu-anh-em-vun-vo-1.jpg',
-        price: '20000',
-    },
-    {
-        id: '5',
-        name: 'Nâu đá',
-        img: 'https://tinhayvip.com/wp-content/uploads/2022/01/eimi-fukada-khoe-nhan-cuoi-khien-nhieu-anh-em-vun-vo-1.jpg',
-        price: '20000',
-    },
-    {
-        id: '5',
-        name: 'Nâu đá',
-        img: 'https://tinhayvip.com/wp-content/uploads/2022/01/eimi-fukada-khoe-nhan-cuoi-khien-nhieu-anh-em-vun-vo-1.jpg',
-        price: '20000',
-    }
-    , {
-        id: '6',
-        name: 'Nâu đá',
-        img: 'https://tinhayvip.com/wp-content/uploads/2022/01/eimi-fukada-khoe-nhan-cuoi-khien-nhieu-anh-em-vun-vo-1.jpg',
-        price: '20000',
-    }, {
-        id: '7',
-        name: 'Nâu đá',
-        img: 'https://tinhayvip.com/wp-content/uploads/2022/01/eimi-fukada-khoe-nhan-cuoi-khien-nhieu-anh-em-vun-vo-1.jpg',
-        price: '20000',
-    }
-]
+
 
 function Order() {
     const port = config()
@@ -289,7 +242,7 @@ function Order() {
 
 
     useEffect(() => {
-        const api = port + "/orders?idB=" + idB
+        const api = port + "/orders/getall?idb=" + idB
         fetch(api)
             .then(res => res.json())
             .then(datas => {
@@ -411,14 +364,14 @@ function Order() {
                     </h3></td>
                     <td>
                         <span className="list_order-table_col-boximg">
-                            <img src={item.img} alt='photo' />
+                            <img src={item.img || nodrink} alt='photo' />
                         </span>
                     </td>
                     <td><h3 className="list_order-table_col-boxvalue list_order-table_col-name">
                         {item.name}
                     </h3></td>
                     <td><h3 className="list_order-table_col-boxvalue">
-                        {item.idP}
+                        {item.idp}
                     </h3></td>
                     <td>
                         <input className='list_order-table_col-number'
@@ -438,7 +391,7 @@ function Order() {
                         />
                     </td>
                     <td><h3 className="list_order-table_col-boxvalue list_order-table_col-time">
-                        {item.timeIn}
+                        {item.timein}
                     </h3></td>
                     <td><h3 className="list_order-table_col-boxvalue list_order-table_col-price">
                         {

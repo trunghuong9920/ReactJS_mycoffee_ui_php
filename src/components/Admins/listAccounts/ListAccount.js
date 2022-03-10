@@ -8,6 +8,7 @@ import EditAccount from './EditAccount'
 import DeleteAccount from "./DeleteAccount"
 import config from "../../../_config"
 import clsx from "clsx"
+import nobody from '../../../images/nobody_m.256x256.jpg'
 
 const listCategorys = ["Id", "Ảnh đại diện", "Tên tài khoản", "Tên nhân viên", "Số điện thoại", "Quyền truy cập", "Trạng thái", "Thao tác"]
 function ListAccount() {
@@ -236,7 +237,7 @@ function ListAccount() {
                                     </div>
                                     <div className="ListAccout_category_col"
                                     >
-                                        <img src={item.avata} alt="avata" />
+                                        <img src={item.avata || nobody} alt="avata" />
                                     </div>
                                     <div className="ListAccout_category_col"
                                     >
