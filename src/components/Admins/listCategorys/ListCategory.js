@@ -126,7 +126,7 @@ function ListCategory() {
     //Load data
     useEffect(() => {
         if (search === '') {
-            const api = port + '/categorys'
+            const api = port + '/categorys/getall'
             fetch(api)
                 .then(res => res.json())
                 .then(data => {

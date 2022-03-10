@@ -16,12 +16,15 @@ function EditCate({ idEdit, hide, handleReloadForEdit }) {
 
     const handleSave = () =>{
         if(CheckInfo(name)){
-            const formData = {
+            const formDt = {
                 name:name
             }
-            const api = port + "/categorys/" + id
+            const api = port + "/categorys/update"
+            const formData = new FormData()
+            formData.append("id", id)
+            formData.append("name", name)
             editData(api, formData)
-            handleReloadForEdit(id,formData)
+            handleReloadForEdit(id,formDt)
             hide()
         }
         else{
@@ -30,7 +33,7 @@ function EditCate({ idEdit, hide, handleReloadForEdit }) {
     }
 
     useEffect(() => {
-        const api = port + "/categorys?id=" + id
+        const api = port + "/categorys/getone?id=" + id
         fetch(api)
             .then(res => res.json())
             .then(data => {

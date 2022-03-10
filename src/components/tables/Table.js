@@ -26,7 +26,7 @@ function Table() {
     const [data, setData] = useState([])
 
     useEffect(() => {
-        const api = port + "/tables"
+        const api = port + "/tables/getall"
         fetch(api)
             .then(res => res.json())
             .then(data => {

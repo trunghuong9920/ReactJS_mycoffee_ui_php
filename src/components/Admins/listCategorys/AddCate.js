@@ -19,7 +19,7 @@ function AddCate({hide, handleReloadForAdd}) {
             const formDt = {
                 name:name
             }
-            const api = port + "/categorys"
+            const api = port + "/categorys/add"
             const formData = new FormData()
             formData.append('name', name)
             create(api,formData)
