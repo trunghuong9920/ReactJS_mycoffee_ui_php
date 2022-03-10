@@ -11,8 +11,8 @@ function Info() {
     const { editData } = ApiController()
     const [data, setData] = useState([])
     const getAccount = localStorage.getItem("idaccount")
-  
-    const api = port + "/info?id="+getAccount
+
+    const api = port + "/info?id=" + getAccount
 
     const [id, setId] = useState('')
     const [avata, setAvata] = useState('')
@@ -20,11 +20,14 @@ function Info() {
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
     const [oldPass, setOldPass] = useState('')
-    const [permission, setPermission] = useState('')
+    const [newPass, setNewPass] = useState('')
+    const [confirmPass, setConfirmPass] = useState('')
     const [errorAccout, setErrorAccount] = useState('')
     const [errorName, setErrorName] = useState('')
     const [errorPhone, setErrorPhone] = useState('')
     const [errorPass, setErrorPass] = useState('')
+    const [erroPassOld, setErrorPassOld] = useState('')
+    const [dataAccount, setDataAccount] = useState([])
 
     useEffect(() => {
         const options = {
@@ -41,7 +44,6 @@ function Info() {
                     setName(item.name)
                     setPhone(item.phone)
                     setOldPass("000000")
-                    setPermission(item.permission)
                 })
             })
             .catch(error => {
@@ -73,6 +75,7 @@ function Info() {
     }
     const handleEditPassword = () => {
         setEditPassword(!editPassword)
+        setOldPass('')
         targetInputPass.current.focus()
     }
     const handleCloseAccount = () => {
@@ -99,55 +102,83 @@ function Info() {
     const handleClosePass = () => {
         setEditPassword(!editPassword)
         setErrorPass("")
-        data.map(item => {
-            setOldPass(item.password)
-        })
+        setOldPass('000000')
+        setErrorPassOld('')
     }
     const handleSaveAvataToData = (urlAvata) => {
         setAvata(urlAvata)
-        const formData = {
-            account: account,
-            name: name,
-            phone: phone,
-            avata: urlAvata,
-            permission: permission,
-            password: oldPass
-        }
-        const api = port + "/users/" + id
+        const api = port + "/info/updateavata"
+        const formData = new FormData()
+        formData.append("id", id)
+        formData.append("avata", urlAvata)
+
         editData(api, formData)
     }
     const handleSaveAccount = () => {
-        if (account !== '') {
-            const formData = {
-                account: account,
-                name: name,
-                phone: phone,
-                avata: avata,
-                permission: permission,
-                password: oldPass
-            }
-            const api = port + "/users/" + id
+        if (account !== '' && errorAccout === '') {
+            setAccount(account)
+            const api = port + "/info/updateaccount"
+            const formData = new FormData()
+            formData.append("id", id)
+            formData.append("account", account)
+
             editData(api, formData)
-            localStorage.setItem("account", account)
             setErrorAccount("")
             setEditAccount(!editAccount)
         }
         else {
-            setErrorAccount("Vui lòng nhập tên tài khoản!")
+            if (errorAccout != '') {
+                setErrorAccount("Tài khoản đã được sử dụng!")
+            }
+            else {
+                setErrorAccount("Vui lòng nhập tên tài khoản!")
+            }
+        }
+    }
+    useEffect(() => {
+        const api = port + '/users/getaccount'
+        fetch(api)
+            .then(res => res.json())
+            .then(data => {
+                setDataAccount(data)
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }, [])
+
+    function checkCoincidentAccount(e) {
+        let count = 0
+        dataAccount.map(item => {
+            if (item.account === e.target.value.replace(/\s+/g, '')) {
+                count += 1
+            }
+        })
+        if (count > 0) {
+            return false
+        }
+        return true
+    }
+
+    const handleCheckAccount = (e) => {
+        setAccount(e.target.value)
+        if (checkCoincidentAccount(e)) {
+            setErrorAccount("")
+        }
+        else {
+            setErrorAccount("Tài khoản đã được sử dụng!")
         }
     }
 
     const handleSaveName = () => {
         if (name !== '') {
-            const formData = {
-                account: account,
-                name: name,
-                phone: phone,
-                avata: avata,
-                permission: permission,
-                password: oldPass
-            }
-            const api = port + "/users/" + id
+            setName(name)
+            const api = port + "/info/updatename"
+
+            const formData = new FormData()
+            formData.append("id", id)
+            formData.append("name", name)
+
             editData(api, formData)
             setErrorName("")
             setEditName(!editName)
@@ -157,25 +188,99 @@ function Info() {
         }
     }
     const handleSavePhone = () => {
-        if (phone !== '') {
-            const formData = {
-                account: account,
-                name: name,
-                phone: phone,
-                avata: avata,
-                permission: permission,
-                password: oldPass
-            }
-            const api = port + "/users/" + id
+        if (phone !== '' && errorPhone === '') {
+            setPhone(phone)
+            const api = port + "/info/updatephone/"
+
+            const formData = new FormData()
+            formData.append("id", id)
+            formData.append("phone", phone)
             editData(api, formData)
             setErrorPhone("")
             setEditPhone(!editPhone)
         }
         else {
-            setErrorPhone("Vui lòng nhập số điên thoại là các chữ số!")
+            if (errorPhone != '') {
+                setErrorPhone("Số điện thoại không đúng!!")
+
+            }
+            else {
+                setErrorPhone("Vui lòng nhập số điên thoại là các chữ số!")
+            }
         }
     }
 
+    const handleSavePass = () => {
+        if (erroPassOld === '' && errorPass === '') {
+            setOldPass('000000')
+            setNewPass('')
+            setConfirmPass('')
+            const api = port + "/info/updatepassword"
+
+            const formData = new FormData()
+            formData.append("id", id)
+            formData.append("password", newPass)
+            editData(api, formData)
+            setEditPassword(!editPassword)
+            setErrorPassOld('')
+        }
+    }
+
+    const handleCheckPhone = (e) => {
+        setPhone(e.target.value)
+        if (is_phonenumber(e.target.value)) {
+            setErrorPhone('')
+        }
+        else {
+            setErrorPhone('Số điện thoại không đúng!')
+        }
+    }
+
+
+    function is_phonenumber(phonenumber) {
+        const phoneno = /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;
+        if (phonenumber.match(phoneno)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    const handleConfirmPass = (e) => {
+        setConfirmPass(e.target.value)
+
+        if (e.target.value === newPass) {
+            setErrorPass('')
+        }
+        else {
+            setErrorPass('Mật khẩu xác nhận không chính xác!')
+        }
+    }
+
+    const handleCheckOldPass = (e) => {
+        setOldPass(e.target.value)
+        const api = port + '/info/checkpass'
+        const formData = new FormData()
+        formData.append("id", id)
+        formData.append("password", e.target.value)
+        fetch(api, {
+            method: "POST",
+            body: formData
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.length == 0) {
+                    setErrorPassOld("Mật khẩu không chính xác!")
+                }
+                else {
+                    setErrorPassOld('')
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 
     return (
         <div className="info">
@@ -242,7 +347,7 @@ function Info() {
                                     readOnly={!editAccount}
                                     value={account}
                                     ref={targetInputAc}
-                                    onChange={e => setAccount(e.target.value)}
+                                    onChange={handleCheckAccount}
                                 />
 
                             </div>
@@ -335,7 +440,7 @@ function Info() {
                                     readOnly={!editPhone}
                                     value={phone}
                                     ref={targetInputPhone}
-                                    onChange={e => setPhone(e.target.value)}
+                                    onChange={handleCheckPhone}
                                 />
                             </div>
                             <p className="editInfo_group_body-error">{errorPhone}</p>
@@ -367,7 +472,7 @@ function Info() {
                                             }
                                     }
                                 >
-                                    <button>Lưu</button>
+                                    <button onClick={handleSavePass}>Lưu</button>
                                     <button
                                         onClick={handleClosePass}
                                     >Hủy</button>
@@ -387,18 +492,15 @@ function Info() {
                                         editPassword ? 'Mật khẩu cũ' : ''
                                     }
                                     value={
-                                        editPassword ? '' : oldPass
+                                        oldPass
                                     }
-                                    onChange={e => setOldPass(e.target.value)}
+                                    onChange={handleCheckOldPass}
                                 />
                                 <input
                                     className="editInfo_group_body_form_editpassword"
                                     readOnly={!editPassword}
                                     type={
                                         editPassword ? 'text' : 'password'
-                                    }
-                                    defaultValue={
-                                        editPassword ? '' : 'password'
                                     }
                                     style={
                                         editPassword ? {
@@ -411,15 +513,14 @@ function Info() {
                                     placeholder={
                                         editPassword ? 'Mật khẩu mới' : ''
                                     }
+                                    value={newPass}
+                                    onChange={e => setNewPass(e.target.value)}
                                 />
                                 <input
                                     className="editInfo_group_body_form_editpassword"
                                     readOnly={!editPassword}
                                     type={
                                         editPassword ? 'text' : 'password'
-                                    }
-                                    defaultValue={
-                                        editPassword ? '' : 'password'
                                     }
                                     style={
                                         editPassword ? {
@@ -432,8 +533,12 @@ function Info() {
                                     placeholder={
                                         editPassword ? 'Xác nhận mật khẩu' : ''
                                     }
+                                    value={confirmPass}
+                                    onChange={handleConfirmPass}
                                 />
                             </div>
+                            <p className="editInfo_group_body-error">{erroPassOld}</p>
+
                             <p className="editInfo_group_body-error">{errorPass}</p>
 
                         </div>
