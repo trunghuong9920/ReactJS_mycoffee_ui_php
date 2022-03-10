@@ -12,35 +12,29 @@ function EditTable({ idEdit, hide, handleReloadForEdit }) {
     const [dataEdit, setDataEdit] = useState([])
     const {checkTable} = TableController()
     const [name, setName]  = useState('')
-    const [area, setArea] = useState('Ngoài sân')
+    const [area, setArea] = useState(0)
     const [status, setStatus] = useState()
     const [error, setError] = useState('')
     const [convertArea, setConvertArea] = useState()
     const handleGetArea = (e) =>{
-        if(e.target.value === '0'){
-            setArea("Ngoài sân")
-            setConvertArea('0')
-        }
-        if(e.target.value === '1'){
-            setArea("Tầng 1")
-            setConvertArea('1')
-        }
-        if(e.target.value === '2'){
-            setArea("Tầng 2")
-            setConvertArea('2')
-        }
+        setArea(e.target.value)
     }
 
     const handleSaveTable = () =>{
         if(checkTable(name)){
-            const formData = {
+            const formDt = {
                 name:name,
                 status: status,
                 area: area
             }
-            const api = port + "/tables/"+id
+            const api = port + "/tables/update"
+            const formData = new FormData()
+            formData.append("id",id)
+            formData.append("name",name)
+            formData.append("area",area)
+
             editData(api, formData)
-            handleReloadForEdit(id,formData)
+            handleReloadForEdit(id,formDt)
             hide()
         }
         else{
@@ -49,7 +43,7 @@ function EditTable({ idEdit, hide, handleReloadForEdit }) {
     }
 
     useEffect(() => {
-        const api = port + "/tables?id=" + id
+        const api = port + "/tables/getone?id=" + id
         fetch(api)
             .then(res => res.json())
             .then(data => {
@@ -58,15 +52,6 @@ function EditTable({ idEdit, hide, handleReloadForEdit }) {
                     setArea(item.area)
                     setName(item.name)
                     setStatus(item.status)
-                    if(item.area === "Ngoài sân"){
-                        setConvertArea('0')
-                    }
-                    if(item.area === "Tầng 1"){
-                        setConvertArea('1')
-                    }
-                    if(item.area === "Tầng 2"){
-                        setConvertArea('2')
-                    }
                 })
             })
     }, [])
@@ -98,7 +83,7 @@ function EditTable({ idEdit, hide, handleReloadForEdit }) {
                                 <h3 className="form_group_title">Khu vực:</h3>
                                 <select
                                     onChange={handleGetArea}
-                                    value = {convertArea}
+                                    value = {area}
                                 >
                                     <option value="0">Ngoài sân</option>
                                     <option value="1">Tầng 1</option>

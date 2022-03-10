@@ -23,7 +23,7 @@ function AddTable({hide , handleReloadForAdd}) {
                 status: 0,
                 area:area
             }
-            const api = port + "/tables"
+            const api = port + "/tables/add"
             const formData = new FormData()
             formData.append('name', name)
             formData.append('area', area)

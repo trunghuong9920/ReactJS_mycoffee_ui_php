@@ -112,7 +112,7 @@ function ListTable() {
     //Load data
     useEffect(() => {
         if (search === '') {
-            const api = port + '/tables'
+            const api = port + '/tables/getall'
             fetch(api)
                 .then(res => res.json())
                 .then(data => {
