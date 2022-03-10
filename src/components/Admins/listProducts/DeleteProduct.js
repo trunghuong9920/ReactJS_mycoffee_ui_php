@@ -6,8 +6,10 @@ function DeleteProduct({ idEdit, hide , handleReloadForDelete}) {
     const port = config()
     const {deleteData} = ApiController()
     const handleSave = () =>{
-        const api = port + "/products"
-        deleteData(api, idEdit)
+        const api = port + "/products/delete"
+        const formData = new FormData()
+        formData.append("id",idEdit)
+        deleteData(api, formData)
         handleReloadForDelete(idEdit)
         hide()
     }

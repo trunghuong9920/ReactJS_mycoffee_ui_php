@@ -14,10 +14,10 @@ function EditProduct({ idEdit, hide, handleReloadForEdit }) {
     const [avata, setAvata] = useState('')
     const [getImgSrc, setGetImgSrc] = useState()
     const [nameP, setNameP] = useState('')
-    const [nameC, setNameC] = useState('')
     const [idC, setIdC] = useState('')
     const [price, setPrice] = useState('')
     const [error, setError] = useState('')
+    const [errorPrice, setErrorPrice] = useState('')
 
     const id = idEdit
     const [dataEdit, setDataEdit] = useState([])
@@ -26,26 +26,26 @@ function EditProduct({ idEdit, hide, handleReloadForEdit }) {
 
     const handleGetProduct = (e) => {
         setIdC(e.target.value)
-        dataCate.map(item => {
-            if (parseInt(e.target.value) === item.id) {
-                setNameC(item.name);
-            }
-        })
     }
 
     const handleSave = () => {
-        if (CheckInfo(nameC, price)) {
-            console.log(nameC);
-            const formData = {
-                nameC: nameC,
+        if (CheckInfo(nameP, price) && errorPrice === '') {
+            const formDt = {
                 idc: idC,
                 name: nameP,
-                price: price, 
-                img:getImgSrc
+                price: price,
+                img: getImgSrc
             }
-            const api = port + "/products/" + id
+            const api = port + "/products/update"
+            const formData = new FormData()
+            formData.append("id", id)
+            formData.append("idc", idC)
+            formData.append("name", nameP)
+            formData.append("img", getImgSrc)
+            formData.append("price", price)
+
             editData(api, formData)
-            handleReloadForEdit(id, formData)
+            handleReloadForEdit(id, formDt)
             hide()
         }
         else {
@@ -54,7 +54,7 @@ function EditProduct({ idEdit, hide, handleReloadForEdit }) {
     }
 
     useEffect(() => {
-        const api = port + "/products?id=" + id
+        const api = port + "/products/getone?id=" + id
         fetch(api)
             .then(res => res.json())
             .then(data => {
@@ -62,7 +62,6 @@ function EditProduct({ idEdit, hide, handleReloadForEdit }) {
                 data.map(item => {
                     setIdC(item.idc)
                     setNameP(item.name)
-                    setNameC(item.nameC)
                     setPrice(item.price)
                     setGetImgSrc(item.img)
                 })
@@ -70,7 +69,7 @@ function EditProduct({ idEdit, hide, handleReloadForEdit }) {
     }, [])
 
     useEffect(() => {
-        const api = port + "/categorys"
+        const api = port + "/categorys/getall"
         fetch(api)
             .then(res => res.json())
             .then(data => {
@@ -97,6 +96,24 @@ function EditProduct({ idEdit, hide, handleReloadForEdit }) {
     const handleReloadImg = () => {
         setAvata('')
         setGetImgSrc('')
+    }
+
+    function checkNumber(value) {
+        var regex = /^[0-9]+$/;
+        if (value.match(regex)) {
+            return true
+        }
+        return false
+    }
+
+    const handleGetPrice = (e) => {
+        setPrice(e.target.value)
+        if (checkNumber(e.target.value)) {
+            setErrorPrice("")
+        }
+        else {
+            setErrorPrice("Giá sản phẩm là các chữ số!")
+        }
     }
     return (
         <>
@@ -162,8 +179,9 @@ function EditProduct({ idEdit, hide, handleReloadForEdit }) {
                                     <input className="form_group_input"
                                         value={price}
                                         placeholder="Vui lòng nhập chữ số..."
-                                        onChange={e => setPrice(e.target.value)}
+                                        onChange={handleGetPrice}
                                     />
+                                    <p className='form_group-error'>{errorPrice}</p>
                                 </div>
                             </div>
                         ))

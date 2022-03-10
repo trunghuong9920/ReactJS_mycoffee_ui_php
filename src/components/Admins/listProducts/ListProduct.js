@@ -98,7 +98,6 @@ function ListProduct() {
             item => {
                 if (item.id === newid) {
                     item.name = formData.name
-                    item.nameC = formData.nameC
                     item.idc = formData.idc
                     item.price = formData.price
                     item.img = formData.img
@@ -114,7 +113,7 @@ function ListProduct() {
     //Load data
     useEffect(() => {
         if (search === '') {
-            const api = port + '/products'
+            const api = port + '/products/getall'
             fetch(api)
                 .then(res => res.json())
                 .then(data => {

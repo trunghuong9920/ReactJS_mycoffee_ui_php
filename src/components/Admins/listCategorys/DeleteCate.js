@@ -1,3 +1,5 @@
+import {useEffect, useState} from 'react'
+
 import ApiController from '../../../services/apiController'
 import config from '../../../_config'
 
@@ -6,13 +8,38 @@ import './style.scss'
 function DeleteCate({ id, hide, handleReloadForDelete }) {
     const port = config()
     const {deleteData} = ApiController()
+    const [data, setData] =useState([])
+    const [error, setError] = useState('')
 
     const handleSave = () => {
-        const api = port + "/categorys"
-        deleteData(api, id)
+        const api = port + "/categorys/delete"
+        const formData = new FormData()
+        formData.append("id",id)
+        deleteData(api, formData)
         handleReloadForDelete(id)
         hide()
+        if(data.length == 0){
+            setError("")
+        }
+        else{
+            setError("Vui lòng xóa toàn bộ sản phẩm trong danh mục để tiếp tục!")
+        }
     }
+
+    useEffect(() =>{
+        const api = port + "/categorys/getproduct?id="+id
+        const options = {
+            method: "GET"
+        }
+        fetch(api, options)
+            .then(res => res.json())
+            .then(data => {
+                setData(data)
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }, [])
 
     return (
         <>
@@ -26,7 +53,7 @@ function DeleteCate({ id, hide, handleReloadForDelete }) {
                 </div>
                 <div className="modal_footer">
                     <div className='modal_footer_error'>
-                        <h3></h3>
+                        <h3>{error}</h3>
                     </div>
                     <div className="modal_footer_groupbtn">
                         <button

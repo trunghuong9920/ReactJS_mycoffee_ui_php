@@ -38,7 +38,7 @@ function AddProduct({ hide, handleReloadForAdd }) {
                 name: nameP,
                 price: price
             }
-            const api = port + "/products"
+            const api = port + "/products/add"
            
             const formData = new FormData()
             formData.append('idc', idC)
@@ -56,7 +56,7 @@ function AddProduct({ hide, handleReloadForAdd }) {
         }
     }
     useEffect(() => {
-        const api = port + "/categorys"
+        const api = port + "/categorys/getall"
         fetch(api)
             .then(res => res.json())
             .then(data => {
