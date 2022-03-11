@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useState, useEffect } from 'react'
+import { useState, useEffect,useRef } from 'react'
 import clsx from 'clsx'
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -22,11 +22,12 @@ function Order() {
     const location = useLocation()
     const query = new URLSearchParams(location.search)
     const idB = query.get("idB")
+    const [idBill, setIdbill] = useState('')
 
     let numberClickNext = 0
     const [showSwitchDesk, setShowSwitchDesk] = useState(false)
     const [countNext, setCountNext] = useState(1)
-    const [tabCate, setTabcate] = useState('1')
+    const [tabCate, setTabcate] = useState()
     const [tabNext, setTabNext] = useState(0)
     const [getCategorys, setGetCategorys] = useState([])
     const [getProduct, setGetProduct] = useState([])
@@ -37,73 +38,29 @@ function Order() {
     const [search, setSearch] = useState('')
 
     const handleAddOrder = (item) => {
+        if (idBill) {
+            const today = new Date()
+            const timeIn = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate() + " " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            reloadForAddNewOrder(item, timeIn)
+            const formData = new FormData()
+            formData.append("idbill", idBill)
+            formData.append("idp", item.id)
+            formData.append("timein", timeIn)
 
-        if (checkItemInOrder(item)) {
-            let AmountOld = 0;
-            let timeInOld = ''
-            let idOrder = 0
-            let discountOld = 0
-            listOrder.map(it => {
-                if (it.idP === item.id) {
-                    AmountOld = it.amount
-                    timeInOld = it.timeIn
-                    idOrder = it.id
-                    discountOld = it.discount
-                }
-            })
-            const formData = {
-                "idB": idB,
-                "img": item.img,
-                "name": item.name,
-                "idP": item.id,
-                "amount": AmountOld + 1,
-                "price": item.price,
-                "discount": discountOld,
-                "timeIn": timeInOld
-            }
-            const api = port + "/orders/" + idOrder
-            editData(api, formData)
-            reloadForAddOrder(item)
+            const api = port + "/orders/add"
+            create(api, formData)
         }
         else {
-            const today = new Date()
-            const timeIn = today.getHours() + ":" + today.getMinutes() + " " + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
-            const formData = {
-                "idB": idB,
-                "img": item.img,
-                "name": item.name,
-                "idP": item.id,
-                "amount": 1,
-                "price": item.price,
-                "discount": 0,
-                "timeIn": timeIn
-            }
-            const api = port + "/orders"
-            create(api, formData)
-            reloadForAddNewOrder(item, timeIn)
+            console.log("No bill");
         }
     }
     const handleUpdateAmountOrder = (value, item) => {
         if (value != '') {
-            if (value <= 0) {
-                value = 1
-                const formData = {
-                    "idB": idB,
-                    "img": item.img,
-                    "name": item.name,
-                    "idP": item.id,
-                    "amount": value,
-                    "price": item.price,
-                    "discount": item.discount,
-                    "timeIn": item.timeIn
-                }
-                const api = port + "/orders/" + item.id
-                editData(api, formData)
-
+            if (value > 0) {
                 const data = [...listOrder]
                 const newData = data.map(
                     it => {
-                        if (it.idP === item.idP) {
+                        if (it.id === item.id) {
                             it.amount = value
                         }
                         return it
@@ -111,53 +68,40 @@ function Order() {
 
                 )
                 setListOrder(newData)
+                const formData = new FormData()
+                formData.append("id", item.id)
+                formData.append("amount", value)
+                const api = port + "/orders/updateamount"
+                editData(api, formData)
+
             }
-            else {
-                const formData = {
-                    "idB": idB,
-                    "img": item.img,
-                    "name": item.name,
-                    "idP": item.idP,
-                    "amount": value,
-                    "price": item.price,
-                    "discount": item.discount,
-                    "timeIn": item.timeIn
-                }
-                const api = port + "/orders/" + item.id
-                editData(api, formData)
+            else{
                 const data = [...listOrder]
                 const newData = data.map(
                     it => {
-                        if (it.idP === item.idP) {
-                            it.amount = value
+                        if (it.id === item.id) {
+                            it.amount = 1
                         }
                         return it
                     }
-
                 )
                 setListOrder(newData)
+                const formData = new FormData()
+                formData.append("id", item.id)
+                formData.append("amount", 1)
+                const api = port + "/orders/updateamount"
+                editData(api, formData)
             }
         }
 
     }
     const handleUpdateDiscountOrder = (value, item) => {
         if (value != '') {
-            const formData = {
-                "idB": idB,
-                "img": item.img,
-                "name": item.name,
-                "idP": item.idP,
-                "amount": item.amount,
-                "price": item.price,
-                "discount": value,
-                "timeIn": item.timeIn
-            }
-            const api = port + "/orders/" + item.id
-            editData(api, formData)
+            
             const data = [...listOrder]
             const newData = data.map(
                 it => {
-                    if (it.idP === item.idP) {
+                    if (it.id === item.id) {
                         it.discount = value
                     }
                     return it
@@ -165,15 +109,22 @@ function Order() {
 
             )
             setListOrder(newData)
+            const formData = new FormData()
+            formData.append("id", item.id)
+            formData.append("discount", value)
+            const api = port + "/orders/updatediscount"
+            editData(api,formData)
         }
 
     }
     const handleDeleteOrder = (id, name) => {
         if (id) {
-            const api = port + "/orders"
-            deleteData(api, id)
-            notifyForDeleteOrder(name)
+            const formData = new FormData()
+            formData.append("id", id)
+            const api = port + "/orders/delete"
+            editData(api,formData)
 
+            notifyForDeleteOrder(name)
             reloadDeleteOrder(id)
         }
         else {
@@ -184,52 +135,24 @@ function Order() {
     function reloadDeleteOrder(id) {
         setListOrder(listOrder.filter(item => item.id != id))
     }
-    function reloadForAddOrder(item) {
-        const data = [...listOrder]
-        const newData = data.map(
-            it => {
-                if (it.idP === item.id) {
-                    it.amount += 1
-                }
-                return it
-            }
-
-        )
-        setListOrder(newData)
-    }
     function reloadForAddNewOrder(item, timeIn) {
         const data = [...listOrder]
         const newData = {
             "idB": idB,
             "img": item.img,
             "name": item.name,
-            "idP": item.id,
+            "idp": item.id,
             "amount": 1,
             "price": item.price,
             "discount": 0,
-            "timeIn": timeIn
+            "timein": timeIn
         }
         data.push(newData)
         setListOrder(data)
     }
 
-    function checkItemInOrder(it) {
-        let count = 0;
-        listOrder.map(item => {
-            if (item.idP === it.id) {
-                count += 1
-            }
-        })
-        if (count === 0) {
-            return false
-        }
-        else {
-            return true
-        }
-    }
-
     useEffect(() => {
-        const api = port + "/tables?id=" + idB
+        const api = port + "/tables/getone?id=" + idB
         fetch(api)
             .then(res => res.json())
             .then(datas => {
@@ -240,16 +163,26 @@ function Order() {
             })
     }, [])
 
-
     useEffect(() => {
-        const api = port + "/orders/getall?idb=" + idB
-        fetch(api)
-            .then(res => res.json())
-            .then(datas => {
-                setListOrder(datas)
-
-            })
+        if (idB) {
+            const api = port + "/orders/getall?idb=" + idB
+            fetch(api)
+                .then(res => res.json())
+                .then(datas => {
+                    setListOrder(datas)
+                })
+        }
     }, [reloadApiOrder])
+    useEffect(() => {
+        if (idB) {
+            const api = port + "/orders/getbill?idb=" + idB
+            fetch(api)
+                .then(res => res.json())
+                .then(datas => {
+                    setIdbill(datas[0].id)
+                })
+        }
+    }, [])
 
     useEffect(() => {
         let totalPriceItem = 0
@@ -262,15 +195,15 @@ function Order() {
 
     useEffect(() => {
         if (search === '') {
-            const api = port + "/products?idc=" + tabCate
+            const api = port + "/products/getfromidc?idc=" + tabCate
             fetch(api)
                 .then(res => res.json())
                 .then(datas => {
                     setGetProduct(datas)
                 })
         }
-        else{
-            const api = port + "/products?name=" + search
+        else {
+            const api = port + "/orders/searchproduct?qsearch=" + search
             fetch(api)
                 .then(res => res.json())
                 .then(datas => {
@@ -281,13 +214,15 @@ function Order() {
     }, [tabCate, search])
 
     useEffect(() => {
-        const api = port + "/categorys"
+        const api = port + "/categorys/getall"
         fetch(api)
             .then(res => res.json())
             .then(datas => {
                 setGetCategorys(datas)
+                setTabcate(datas[0].id)
             })
     }, [])
+
     numberClickNext = getCategorys.length / 4
 
     const handlePrev = () => {
@@ -302,7 +237,7 @@ function Order() {
             setCountNext(countNext + 1)
         }
     }
-    const handleShowSwitchDesk = () =>{
+    const handleShowSwitchDesk = () => {
         setShowSwitchDesk(!showSwitchDesk)
     }
 
@@ -584,9 +519,9 @@ function Order() {
             {
                 showSwitchDesk &&
                 <Switchdesk
-                    showSwitchDesk = {showSwitchDesk}
+                    showSwitchDesk={showSwitchDesk}
                     idB={idB}
-                    hide = {handleShowSwitchDesk}
+                    hide={handleShowSwitchDesk}
                     nameTable={nameTable}
                 />
             }
