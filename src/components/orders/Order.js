@@ -1,6 +1,6 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useState, useEffect,useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import clsx from 'clsx'
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -20,6 +20,7 @@ function Order() {
     const port = config()
     const { create, editData, deleteData } = ApiController()
     const location = useLocation()
+    const Navigate = useNavigate()
     const query = new URLSearchParams(location.search)
     const idB = query.get("idB")
     const [idBill, setIdbill] = useState('')
@@ -75,7 +76,7 @@ function Order() {
                 editData(api, formData)
 
             }
-            else{
+            else {
                 const data = [...listOrder]
                 const newData = data.map(
                     it => {
@@ -95,9 +96,10 @@ function Order() {
         }
 
     }
+
     const handleUpdateDiscountOrder = (value, item) => {
         if (value != '') {
-            
+
             const data = [...listOrder]
             const newData = data.map(
                 it => {
@@ -113,7 +115,7 @@ function Order() {
             formData.append("id", item.id)
             formData.append("discount", value)
             const api = port + "/orders/updatediscount"
-            editData(api,formData)
+            editData(api, formData)
         }
 
     }
@@ -122,7 +124,7 @@ function Order() {
             const formData = new FormData()
             formData.append("id", id)
             const api = port + "/orders/delete"
-            editData(api,formData)
+            editData(api, formData)
 
             notifyForDeleteOrder(name)
             reloadDeleteOrder(id)
@@ -179,7 +181,19 @@ function Order() {
             fetch(api)
                 .then(res => res.json())
                 .then(datas => {
-                    setIdbill(datas[0].id)
+                    if (datas.length > 0) {
+                        setIdbill(datas[0].id)
+                    }
+                    else {
+                        const iduser = localStorage.getItem("idaccount")
+                        const api = port + "/pay/addbill"
+
+                        const formData = new FormData()
+                        formData.append("idtable", idB)
+                        formData.append("iduser", iduser)
+                        create(api, formData)
+                        Navigate("/")
+                    }
                 })
         }
     }, [])

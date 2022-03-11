@@ -1,31 +1,46 @@
 import { ToastContainer, toast } from 'react-toastify';
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 import 'react-toastify/dist/ReactToastify.css';
 import './style.css'
 import config from '../../_config';
+import ApiController from '../../services/apiController';
 
 const namelists = ['STT', 'Hình ảnh', 'Tên món', 'Mã món', 'Số lượng', 'Đơn giá (VNĐ)', 'Chiết khấu (%)', 'Giờ vào', 'Thành tiền (VNĐ)', 'Lựa chọn']
 function Pay({ showPay, hide, idB, nameTable, notifyPay }) {
     const port = config()
+    const { create, editData, deleteData } = ApiController()
+    const Navigate = useNavigate()
     const [listOrder, setListOrder] = useState([])
     const [totalAllOrder, setTotalAllOrder] = useState(0)
     const [discountPay, setDiscountPay] = useState(0)
     const [itemValueChecked, setItemValueChecked] = useState([])
+    const [idBill, setIdbill] = useState('')
 
     useEffect(() => {
-        const api = port + "/orders?idB=" + idB
+        const api = port + "/orders/getall?idb=" + idB
         fetch(api)
             .then(res => res.json())
             .then(datas => {
                 setListOrder(datas)
                 const newData = []
-                datas.map(item =>{
+                datas.map(item => {
                     newData.push(item.id)
                 })
                 setItemValueChecked(newData)
             })
     }, [showPay])
+    useEffect(() => {
+        if (idB) {
+            const api = port + "/orders/getbill?idb=" + idB
+            fetch(api)
+                .then(res => res.json())
+                .then(datas => {
+                    setIdbill(datas[0].id)
+                })
+        }
+    }, [])
     const handleChecked = (id) => {
         setItemValueChecked(prev => {
             const isChecked = itemValueChecked.includes(id)             //true or false
@@ -39,8 +54,44 @@ function Pay({ showPay, hide, idB, nameTable, notifyPay }) {
     }
 
     const printInvoice = () => {
-        notifyPay()
-        hide()
+        if (listOrder.length === itemValueChecked.length) {
+            const iduser = localStorage.getItem("idaccount")
+
+            const formData = new FormData()
+            formData.append("idtable", idB)
+            formData.append("iduser", iduser)
+
+            const api = port + "/pay/addbill"
+
+            const today = new Date()
+            const timeout = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate() + " " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            const formDataUpdateBill = new FormData()
+
+            formDataUpdateBill.append("idbill", idBill)
+            formDataUpdateBill.append("discount", discountPay)
+            formDataUpdateBill.append("timeout", timeout)
+            formDataUpdateBill.append("iduser", iduser)
+
+            const formDataUpdateInvoidBill = new FormData()
+            formDataUpdateInvoidBill.append("idbill", idBill)
+
+            if(idBill != ''){
+                create(api, formData)
+
+                const api2 = port + "/pay/updatebill"
+                editData(api2, formDataUpdateBill)
+
+                const api3 = port + "/pay/updateinvbill"
+                editData(api3, formDataUpdateInvoidBill)
+
+                Navigate("/")
+            }
+
+        }
+        else {
+        }
+        // notifyPay()
+        // hide()
     }
     function totalPrice(amount, discount, price) {
         return (amount * price) - (((amount * price) / 100) * discount)
@@ -54,8 +105,8 @@ function Pay({ showPay, hide, idB, nameTable, notifyPay }) {
         listOrder.map(item => {
             const CheckPay = document.getElementById(`pay_checkbox-${item.id}`)
 
-            if(CheckPay){
-                if(CheckPay.checked === true){
+            if (CheckPay) {
+                if (CheckPay.checked === true) {
                     totalPriceItem += totalPrice(item.amount, item.discount, item.price);
                 }
             }
@@ -77,7 +128,7 @@ function Pay({ showPay, hide, idB, nameTable, notifyPay }) {
                         {item.name}
                     </h3></div>
                     <div><h3 className="pay_body-table_col-boxvalue">
-                        {item.idP}
+                        {item.idp}
                     </h3></div>
                     <div><h3 className="pay_body-table_col-boxvalue">
                         {item.amount}
@@ -89,7 +140,7 @@ function Pay({ showPay, hide, idB, nameTable, notifyPay }) {
                         {item.discount}
                     </h3></div>
                     <div><h3 className="pay_body-table_col-boxvalue pay_body-table_col-time">
-                        {item.timeIn}
+                        {item.timein}
                     </h3></div>
                     <div><h3 className="pay_body-table_col-boxvalue pay_body-table_col-price">
                         {totalPrice(item.amount, item.discount, item.price)}
