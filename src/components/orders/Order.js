@@ -99,11 +99,10 @@ function Order() {
 
     const handleUpdateDiscountOrder = (value, item) => {
         if (value != '') {
-
             const data = [...listOrder]
             const newData = data.map(
                 it => {
-                    if (it.id === item.id) {
+                    if (it.id == item.id) {
                         it.discount = value
                     }
                     return it
@@ -191,6 +190,10 @@ function Order() {
                         const formData = new FormData()
                         formData.append("idtable", idB)
                         formData.append("iduser", iduser)
+                        formData.append("id", '')
+                        formData.append("status", '0')
+                        formData.append("timeout", '')
+
                         create(api, formData)
                         Navigate("/")
                     }
@@ -252,7 +255,9 @@ function Order() {
         }
     }
     const handleShowSwitchDesk = () => {
-        setShowSwitchDesk(!showSwitchDesk)
+        if(listOrder.length > 0){
+            setShowSwitchDesk(!showSwitchDesk)
+        }
     }
 
     const { showPay, handleShowPay } = useModal()

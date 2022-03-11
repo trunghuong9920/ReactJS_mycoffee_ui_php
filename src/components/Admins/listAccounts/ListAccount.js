@@ -9,10 +9,12 @@ import DeleteAccount from "./DeleteAccount"
 import config from "../../../_config"
 import clsx from "clsx"
 import nobody from '../../../images/nobody_m.256x256.jpg'
+import ApiController from "../../../services/apiController"
 
 const listCategorys = ["Id", "Ảnh đại diện", "Tên tài khoản", "Tên nhân viên", "Số điện thoại", "Quyền truy cập", "Trạng thái", "Thao tác"]
 function ListAccount() {
     const port = config()
+    const {create, editData, deleteData } = ApiController()
     const [getData, setGetData] = useState([])
     const [showAdd, setShowAdd] = useState(false)
     const [showEdit, setShowEdit] = useState(false)
@@ -43,6 +45,35 @@ function ListAccount() {
         }
     }
 
+    const handleStatus = (id)=>{
+        const cb = document.getElementById(`statusForm-${id}`)
+        const api = port + "/users/updatestatus"
+        if(cb.checked === true){
+            const formData = new FormData()
+            formData.append("id", id)
+            formData.append("status", 1)
+            editData(api,formData)
+            const api2 = port + '/users/getalldata'
+            fetch(api2)
+                .then(res => res.json())
+                .then(data => {
+                    setGetData(data)
+                })
+        }
+        else{
+            const formData = new FormData()
+            formData.append("id", id)
+            formData.append("status", 0)
+            editData(api,formData)
+            const api2 = port + '/users/getalldata'
+            fetch(api2)
+                .then(res => res.json())
+                .then(data => {
+                    setGetData(data)
+                })
+        }
+    }
+    
     useEffect(() => {
         for (let i = 0; i <= totalPage; i++) {
             const btnPage = document.getElementById(`paginate_list_link-${i}`)
@@ -263,11 +294,15 @@ function ListAccount() {
                                             <input
                                                 type={"checkbox"}
                                                 hidden={true}
+                                                checked = {
+                                                    item.status == 1
+                                                }
+                                                onChange = {()=>handleStatus(item.id)}
                                                 id={`statusForm-${item.id}`}
                                             />
                                             <label
                                                 className={clsx('statusForm-unlock',
-                                                    item.status == 0 ? {
+                                                    item.status == 1 ? {
                                                         'statusForm_activeUnlock': false
                                                     } : {
                                                         'statusForm_activeUnlock': true
@@ -277,7 +312,7 @@ function ListAccount() {
                                             ><i className="ti-unlock"></i></label>
                                             <label
                                                 className={clsx('statusForm-lock',
-                                                    item.status == 1 ? {
+                                                    item.status == 0 ? {
                                                         'statusForm_activeUnlock': false
                                                     } : {
                                                         'statusForm_activeUnlock': true

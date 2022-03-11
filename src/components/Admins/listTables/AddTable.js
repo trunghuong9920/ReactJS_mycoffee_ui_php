@@ -29,6 +29,7 @@ function AddTable({hide , handleReloadForAdd}) {
             formData.append('area', area)
             create(api,formData)
             handleReloadForAdd(formDt)
+            
             hide()
         }
         else{

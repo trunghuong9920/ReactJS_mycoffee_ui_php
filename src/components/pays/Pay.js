@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './style.css'
 import config from '../../_config';
 import ApiController from '../../services/apiController';
+import nodrink from '../../images/nodrink.jpg'
 
 const namelists = ['STT', 'Hình ảnh', 'Tên món', 'Mã món', 'Số lượng', 'Đơn giá (VNĐ)', 'Chiết khấu (%)', 'Giờ vào', 'Thành tiền (VNĐ)', 'Lựa chọn']
 function Pay({ showPay, hide, idB, nameTable, notifyPay }) {
@@ -17,6 +18,8 @@ function Pay({ showPay, hide, idB, nameTable, notifyPay }) {
     const [discountPay, setDiscountPay] = useState(0)
     const [itemValueChecked, setItemValueChecked] = useState([])
     const [idBill, setIdbill] = useState('')
+    const [lastIdBill, setBillData] = useState()
+
 
     useEffect(() => {
         const api = port + "/orders/getall?idb=" + idB
@@ -31,6 +34,16 @@ function Pay({ showPay, hide, idB, nameTable, notifyPay }) {
                 setItemValueChecked(newData)
             })
     }, [showPay])
+
+    useEffect(() => {
+        const api = port + "/pay/getall"
+        fetch(api)
+            .then(res => res.json())
+            .then(datas => {
+                setBillData(datas[datas.length - 1].id)
+            })
+    }, [showPay])
+
     useEffect(() => {
         if (idB) {
             const api = port + "/orders/getbill?idb=" + idB
@@ -40,7 +53,7 @@ function Pay({ showPay, hide, idB, nameTable, notifyPay }) {
                     setIdbill(datas[0].id)
                 })
         }
-    }, [])
+    }, [showPay])
     const handleChecked = (id) => {
         setItemValueChecked(prev => {
             const isChecked = itemValueChecked.includes(id)             //true or false
@@ -60,6 +73,8 @@ function Pay({ showPay, hide, idB, nameTable, notifyPay }) {
             const formData = new FormData()
             formData.append("idtable", idB)
             formData.append("iduser", iduser)
+            formData.append("id", '')
+            formData.append("status", '0')
 
             const api = port + "/pay/addbill"
 
@@ -75,7 +90,7 @@ function Pay({ showPay, hide, idB, nameTable, notifyPay }) {
             const formDataUpdateInvoidBill = new FormData()
             formDataUpdateInvoidBill.append("idbill", idBill)
 
-            if(idBill != ''){
+            if (idBill != '') {
                 create(api, formData)
 
                 const api2 = port + "/pay/updatebill"
@@ -88,10 +103,43 @@ function Pay({ showPay, hide, idB, nameTable, notifyPay }) {
             }
 
         }
-        else {
+        else if (itemValueChecked.length > 0) {
+            const iduser = localStorage.getItem("idaccount")
+            const today = new Date()
+            const timeout = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate() + " " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+            const formData = new FormData()
+            formData.append("idtable", idB)
+            formData.append("iduser", iduser)
+            formData.append("discount", discountPay)
+            formData.append("id", parseInt(lastIdBill) + 1)
+            formData.append("timeout", timeout)
+            formData.append("status", '1')
+
+            const api = port + "/pay/addbill"
+            const options = {
+                method: "POST",
+                body: formData
+            }
+            fetch(api, options)
+                .then(res => res.json())
+                .then(data => {
+                    if (data == 1) {
+                        itemValueChecked.map(item => {
+                            const formDataUpdate = new FormData()
+                            formDataUpdate.append("id", item)
+                            formDataUpdate.append("idbill", parseInt(lastIdBill) + 1)
+                            const api2 = port + "/pay/updatehalfinvbill"
+                            editData(api2, formDataUpdate)
+                        })
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            Navigate("/")
+
         }
-        // notifyPay()
-        // hide()
     }
     function totalPrice(amount, discount, price) {
         return (amount * price) - (((amount * price) / 100) * discount)
@@ -123,7 +171,7 @@ function Pay({ showPay, hide, idB, nameTable, notifyPay }) {
                     <div><h3 className="pay_body-table_col-boxvalue">
                         {index + 1}
                     </h3></div>
-                    <div className='pay_body-table_col-img'><img src={item.img} alt='photo' /></div>
+                    <div className='pay_body-table_col-img'><img src={item.img || nodrink} alt='photo' /></div>
                     <div><h3 className="pay_body-table_col-boxvalue pay_body-table_col-name">
                         {item.name}
                     </h3></div>

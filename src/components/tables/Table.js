@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect,useRef } from 'react'
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -41,6 +41,7 @@ function Table() {
 
     }, [positon])
 
+
     return (
         <div className="table-main">
             <ul className='tabbar-top'>
@@ -73,7 +74,7 @@ function Table() {
                         data.map((item, index) => (
 
                             <div key={index} className={clsx('table_box', 'tableNoempty', {
-                                'tableempty': item.status === '1',
+                                'tableempty': item.status == 1
                             })}>
                                 <Link className="table_box-link" to={`/order?idB=${item.id}`}>{item.name}</Link>
                             </div>

@@ -1,39 +1,76 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import './style.scss'
 import config from '../../_config'
 import { type } from '@testing-library/user-event/dist/type'
 import clsx from 'clsx'
+import ApiController from '../../services/apiController'
 
-
-const listArea = ["Ngoài sân", "Tầng 1", "Tầng 2"]
-function Switchdesk({showSwitchDesk, idB, hide, nameTable }) {
+const listArea = [
+    {
+        id: 0,
+        name: 'Ngoài sân',
+    },
+    {
+        id: 1,
+        name: 'Tầng 1',
+    }, {
+        id: 2,
+        name: 'Tầng 2',
+    }
+]
+function Switchdesk({ showSwitchDesk, idB, hide, nameTable }) {
     const port = config()
-    const [area, setArea] = useState("Ngoài sân")
+    const [area, setArea] = useState('0')
     const [data, setData] = useState([])
     const [listOrder, setListOrder] = useState([])
+    const { create, editData, deleteData } = ApiController()
+    const Navigate = useNavigate()
 
-    const handleClickTable = () =>{
-        
+    const handleClickTable = (item) => {
+        const api = port + "/switchdesk/getonebill?idb=" + item.id
+        fetch(api)
+            .then(res => res.json())
+            .then(data => {
+                data.map(item => {
+                    const api = port + "/switchdesk/updateinvoicebill"
+                    listOrder.map(it => {
+                        const formData = new FormData()
+                        formData.append("id", it.id)
+                        formData.append("idbill", item.id)
+
+                        editData(api, formData)
+                    })
+                })
+            })
+        Navigate('/')
     }
 
     useEffect(() => {
-        const api = port + "/tables?area=" + area
+        const api = port + "/tables/getall"
         fetch(api)
             .then(res => res.json())
-            .then(datas => {
-                setData(datas.filter(item => item.id != idB))
+            .then(data => {
+                const newData = []
+                data.map(item => {
+                    if (item.area == area) {
+                        newData.push(item)
+                    }
+                })
+                setData(newData.filter(item => item.id != idB))
             })
     }, [area])
 
     useEffect(() => {
-        const api = port + "/orders?idB=" + idB
+        const api = port + "/orders/getall?idb=" + idB
         fetch(api)
             .then(res => res.json())
             .then(datas => {
                 setListOrder(datas)
             })
     }, [showSwitchDesk])
+    console.log(listOrder);
     return (
         <>
             <div className="overlay">
@@ -55,17 +92,17 @@ function Switchdesk({showSwitchDesk, idB, hide, nameTable }) {
                         <ul className='switchdesk-box_body_left_list'>
                             {
                                 listArea.map((item, index) => (
-                                    <li className='switchdesk-box_body_left_list_item'>
-                                        <button className={clsx('switchdesk-box_body_left_list_item_link', 
-                                            item === area ? {
+                                    <li className='switchdesk-box_body_left_list_item' key={index}>
+                                        <button className={clsx('switchdesk-box_body_left_list_item_link',
+                                            item.id === area ? {
                                                 'switchdesk-box_btn-active': true
                                             } : {
-                                                'switchdesk-box_btn-active' : false
+                                                'switchdesk-box_btn-active': false
                                             }
                                         )}
-                                            onClick={() => setArea(item)}
+                                            onClick={() => setArea(item.id)}
                                         >
-                                            <i>></i><h3>{item}</h3>
+                                            <i>></i><h3>{item.name}</h3>
                                         </button>
                                     </li>
                                 ))
@@ -78,7 +115,7 @@ function Switchdesk({showSwitchDesk, idB, hide, nameTable }) {
                                 <button
                                     key={index}
                                     className='switchdesk-box_body_right_table'
-                                    onClick={handleClickTable}
+                                    onClick={() => handleClickTable(item)}
                                 >
                                     <h4>{item.name}</h4>
                                 </button>
