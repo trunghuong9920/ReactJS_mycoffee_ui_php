@@ -1,0 +1,189 @@
+@import "../../../globalStyle/scss/base.scss";
+@import "../../../globalStyle/scss/mixin.scss";
+.modal_detail{
+    width: 1150px;
+    min-height: 50px;
+    background-color: $color-5;
+    border: 1px solid $color-2;
+    box-shadow: 0 2px 12px rgb(0, 0, 0, 20%);
+    border-radius: 12px;
+    position: fixed;
+    top: 60px;
+    left: 16%;
+    animation: slideIn linear .3s;
+
+    &_header{
+        padding: 12px;
+        border-bottom: 1px solid $color-2;
+        h1{
+            margin: 0;
+            text-align: center;
+            font-size: 1.6rem;
+            color: $color-11;
+        }
+    }
+    &_body{
+        padding: 12px;
+        .form_group{
+            &_title{
+                color: $color-11;
+            }
+            &_input{
+                width: 60%;
+                border-bottom: 1px solid $color-2;
+            }
+            img{
+                width: 60px;
+                height: 60px;
+                margin-bottom: 6px;
+            }
+            select{
+                cursor: pointer;
+            }
+            &_imgsrc{
+                display: flex;
+                &_upfile{
+                    margin-left: 12px;
+                    padding: 6px;
+                    font-size: 1.4rem;
+                    @include btnEdit();
+                    i{
+                        margin-right: 4px;
+                    }
+                }
+                &_reloadimg{
+                    margin-left: 12px;
+                    @include btnEdit();
+                    i{
+                        margin-right: 4px;
+                    }
+                }
+            }
+            &-error{
+                color: red;
+                font-size: 1.4rem;
+            }
+        }
+    }
+    &_footer{
+        width: 100%;
+        padding: 12px;
+        margin-top: 22px;
+        border-top: 1px solid $color-2;
+        display: flex;
+        align-items: center;
+        &_groupbtn{
+            display: flex;
+            float: right;
+            padding-bottom: 12px;
+            button{
+                @include btnEdit();
+                margin: 0 8px;
+            }
+        }
+        &_error{
+            flex: 1;
+            h3{
+                margin: 0 4px;
+                color:  $color-14;
+            }
+        }
+    }
+
+}
+
+.modaldetail{
+    &_category{
+        display: flex;
+        height: 60px;
+        &_col{
+            border-right: 2px solid $color-5;
+            h3{
+               text-align: center;
+            }
+            &-control{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+                &-edit, &-delete{
+                    margin: 0 12px;
+                    cursor: pointer;
+                    @include btnEdit();
+                }
+            }
+            img{
+                height: 100%;
+                width: auto;
+                max-width: 100%;
+                margin: 0 auto;
+                display: block;
+            }
+        }
+        &_col:nth-child(1){
+            width: 4%;
+        }
+        &_col:nth-child(2){
+            width: 6%;
+        }
+        &_col:nth-child(3){
+            width: 23%;
+        }
+        &_col:nth-child(4){
+            width: 8%;
+        }
+        &_col:nth-child(5){
+            width: 10%;
+        }
+        &_col:nth-child(6){
+            width: 5%;
+        }
+        &_col:nth-child(7){
+            width: 5%;
+        }
+        &_col:nth-child(8){
+            width: 15%;
+        }&_col:nth-child(9){
+            width: 15%;
+        }&_col:nth-child(10){
+            width: 10%;
+        }
+       
+        &-active{
+            background-color: $color-10;
+        }
+    }
+}
+.modaldetail_category_body{
+    .modaldetail_category:nth-child(2n){
+        background-color: $color-8;
+    }
+
+}
+.modaldetail_body_col_value{
+    font-size: 1.4rem;
+    color: $color-13;
+}
+
+.colRight_header_right_search{
+    height: 30px;
+}
+
+.modaldetail_bodytotail{
+    margin-top: 30px;
+    margin-left: 24px;
+    &-form{
+        display: flex;
+        &-title{
+            font-size: 1.4rem;
+            margin: 8px 0;
+            margin-right: 12px;
+            color: $color-11;
+        }
+        &-value{
+            font-size: 1.4rem;
+            margin: 8px 0;
+            color: $color-14;
+        }
+    }
+}

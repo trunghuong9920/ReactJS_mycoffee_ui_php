@@ -2,22 +2,21 @@ import { Link } from "react-router-dom"
 import { useState, useEffect } from "react"
 
 import "./style.scss"
+import "./styleDetail.scss"
 
 import config from "../../../_config"
 import clsx from "clsx"
-import nobody from '../../../images/nobody_m.256x256.jpg'
 import ApiController from "../../../services/apiController"
+import Detail from "./Detail"
 
 const listCategorys = ["Id", "Bàn", "Giảm giá", "Thời gian xuất", "Trạng thái", "Nhân viên", "Thao tác"]
 function ListAccount() {
     const port = config()
-    const {create, editData, deleteData } = ApiController()
     const [getData, setGetData] = useState([])
-    const [showAdd, setShowAdd] = useState(false)
-    const [showEdit, setShowEdit] = useState(false)
-    const [showDelete, setShowDelete] = useState(false)
-    const [idEdit, setIdEdit] = useState()
+    const [showDetailBill, setShowDetailBill] = useState(false)
+    const [idBill, setIdBill] = useState()
     const [search, setSearch] = useState('')
+    const [discountAll, setDiscountAll] = useState(0)
 
 
     const [positionPage, setPositionPage] = useState(1)
@@ -41,7 +40,7 @@ function ListAccount() {
             setStartPage(startPage + 3)
         }
     }
-    
+
     useEffect(() => {
         for (let i = 0; i <= totalPage; i++) {
             const btnPage = document.getElementById(`paginate_list_link-${i}`)
@@ -66,13 +65,11 @@ function ListAccount() {
 
     const handleActiveBtnPaginate = (value) => {
         setPositionPage(value)
-
     }
-
-    const handleEdit = (id) => {
-        setIdEdit(id)
-
-        setShowEdit(!showEdit)
+    const handleShowDetail = (id,discount) => {
+        setIdBill(id)
+        setShowDetailBill(!showDetailBill)
+        setDiscountAll(discount)
     }
 
     //Load data
@@ -86,15 +83,15 @@ function ListAccount() {
                 })
         }
         else {
-            const api = port + '/statistical/getallsearch?qsearch='+search
-           
+            const api = port + '/statistical/getallsearch?qsearch=' + search
+
             const options = {
                 method: "GET"
             }
             fetch(api, options)
                 .then(res => res.json())
                 .then(data => {
-                   setGetData(data)
+                    setGetData(data)
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -103,23 +100,23 @@ function ListAccount() {
     }, [search])
 
 
-    // function ModalEdit() {
-    //     return (
-    //         <>
-    //             <div className="modal">
-    //                 <div className="modal_header">
-    //                     <h1>Chỉnh sửa thông tin tài khoản</h1>
-    //                 </div>
-    //                 <EditAccount
-    //                     idEdit={idEdit}
-    //                     handleEdit={handleEdit}
-    //                     handleReloadForEdit={handleReloadForEdit}
-    //                 />
+    function ModalDetail() {
+        return (
+            <>
+                <div className="modal_detail">
+                    <div className="modal_detail_header">
+                        <h1>Thông tin chi tiết hóa đơn</h1>
+                    </div>
+                    <Detail
+                        idBill={idBill}
+                        hide={handleShowDetail}
+                        discountAll = {discountAll}
+                    />
 
-    //             </div>
-    //         </>
-    //     )
-    // }
+                </div>
+            </>
+        )
+    }
 
     return (
         <>
@@ -136,11 +133,11 @@ function ListAccount() {
                         />
 
                     </div>
-                   
+
                 </div>
             </div>
             <div className="colRight_body">
-                <div className="ListAccount">
+                <div className="statistical">
                     <div className="statistical_category statistical_category-active">
                         {
                             listCategorys.map((item, index) => (
@@ -158,29 +155,29 @@ function ListAccount() {
                                 <div key={index} className="statistical_category">
                                     <div className="statistical_category_col"
                                     >
-                                        <h3 className="ListAccount_body_col_value">{item.id}</h3>
+                                        <h3 className="statistical_body_col_value">{item.id}</h3>
                                     </div>
                                     <div className="statistical_category_col"
                                     >
-                                        <h3 className="ListAccount_body_col_value">{item.nametable}</h3>
+                                        <h3 className="statistical_body_col_value">{item.nametable}</h3>
                                     </div>
                                     <div className="statistical_category_col"
                                     >
-                                        <h3 className="ListAccount_body_col_value">{item.discount}</h3>
+                                        <h3 className="statistical_body_col_value">{item.discount}</h3>
                                     </div>
                                     <div className="statistical_category_col"
                                     >
-                                        <h3 className="ListAccount_body_col_value">{item.timeout}</h3>
+                                        <h3 className="statistical_body_col_value">{item.timeout}</h3>
                                     </div>
                                     <div className="statistical_category_col"
                                     >
-                                        <h3 className="ListAccount_body_col_value">{
+                                        <h3 className="statistical_body_col_value">{
                                             item.status == 0 ? 'Chưa thanh toán' : 'Đã thanh toán'
                                         }</h3>
                                     </div>
                                     <div className="statistical_category_col"
                                     >
-                                        <h3 className="ListAccount_body_col_value">{
+                                        <h3 className="statistical_body_col_value">{
                                             item.name
                                         }</h3>
                                     </div>
@@ -188,6 +185,7 @@ function ListAccount() {
                                     >
                                         <div className="statistical_category_col-control">
                                             <button className="statistical_category_col-control-edit"
+                                                onClick={() => handleShowDetail(item.id, item.discount)}
                                             ><i className="ti-eye"></i></button>
                                         </div>
                                     </div>
@@ -242,12 +240,13 @@ function ListAccount() {
                             </li>
                         </ul>
                     </div>
-{/*                     
+
                     {
-                        showEdit &&
-                        <ModalEdit />
+                        showDetailBill &&
+
+                        <ModalDetail
+                        />
                     }
-                    */}
                 </div>
             </div>
         </>
