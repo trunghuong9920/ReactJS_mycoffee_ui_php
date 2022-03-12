@@ -12,6 +12,18 @@ function Login() {
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [data, setData] = useState([])
+    const [hidePass, setHidePass] = useState('password')
+
+
+    const handleSetHidePass =()=>{
+        if(hidePass === 'password'){
+            setHidePass('text')
+        }
+        else if(hidePass === 'text'){
+            setHidePass('password')
+
+        }
+    }
 
     function checkInfo(account, password) {
         if (account === '') return false
@@ -88,12 +100,12 @@ function Login() {
                         <div className='box-right_inputgroup'>
                             <label><FontAwesomeIcon icon="fa-solid fa-key" /></label>
                             <input placeholder='Nhập vào mật khẩu... '
-                                type="password"
+                                type= {hidePass}                               
                                 value={password}
                                 onChange={e => setPassword(e.target.value)}
                             />
                         </div>
-
+                        <button  type='button' className='btn-eyes' onClick={handleSetHidePass}><i className='ti-eye'></i></button>
                         <p className='box-right_error'>{error}</p>
                         <button className='btn-login' type='button' onClick={handleLogin}>Đăng nhập</button>
 

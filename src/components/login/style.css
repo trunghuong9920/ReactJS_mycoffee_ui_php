@@ -94,3 +94,13 @@
     font-weight: 500;
     font-size: 1.2rem;
 }
+.btn-eyes{
+    width: 25px;
+    height: 15px;
+    background-color: rgb(252, 252, 252);
+    cursor: pointer;
+    border-radius: 40%;
+}
+.btn-eyes i{
+    color: rgb(25, 26, 23);
+}

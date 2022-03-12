@@ -24,6 +24,20 @@ function Table() {
     const port = config()
     const [positon, setPosition] = useState(0)
     const [data, setData] = useState([])
+    const [dataTableActive, setDataTableActive] = useState([]) 
+
+    useEffect(() => {
+        const api = port + "/tables/checktable"
+        fetch(api)
+            .then(res => res.json())
+            .then(data => {
+                const newData = []
+                data.map(item =>{
+                    newData.push(item.id)
+                })
+                setDataTableActive(newData)
+            })
+    }, [positon])
 
     useEffect(() => {
         const api = port + "/tables/getall"
@@ -40,7 +54,6 @@ function Table() {
             })
 
     }, [positon])
-
 
     return (
         <div className="table-main">
@@ -74,7 +87,7 @@ function Table() {
                         data.map((item, index) => (
 
                             <div key={index} className={clsx('table_box', 'tableNoempty', {
-                                'tableempty': item.status == 1
+                                'tableempty': dataTableActive.includes(item.id)
                             })}>
                                 <Link className="table_box-link" to={`/order?idB=${item.id}`}>{item.name}</Link>
                             </div>

@@ -33,18 +33,6 @@ function ListAccount() {
     const [startPage, setStartPage] = useState(1)
     const [nextPage, setNextPage] = useState(1)
 
-    const handleBackPage = () => {
-        if (startPage > 1) {
-            setStartPage(startPage - 3)
-        }
-    }
-    const handleNextPage = () => {
-        if (nextPage < totalNextPage) {
-            setNextPage(nextPage + 1)
-            setStartPage(startPage + 3)
-        }
-    }
-
     const handleStatus = (id)=>{
         const cb = document.getElementById(`statusForm-${id}`)
         const api = port + "/users/updatestatus"
@@ -74,6 +62,18 @@ function ListAccount() {
         }
     }
     
+    const handleBackPage = () => {
+        if (startPage > 1) {
+            setStartPage(startPage - 3)
+        }
+    }
+    const handleNextPage = () => {
+        if (nextPage < totalNextPage) {
+            setNextPage(nextPage + 1)
+            setStartPage(startPage + 3)
+        }
+    }
+
     useEffect(() => {
         for (let i = 0; i <= totalPage; i++) {
             const btnPage = document.getElementById(`paginate_list_link-${i}`)

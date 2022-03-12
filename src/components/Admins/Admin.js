@@ -9,6 +9,7 @@ import ListAccount from './listAccounts/ListAccount'
 import ListTable from './listTables/ListTable'
 import ListCategory from './listCategorys/ListCategory'
 import ListProduct from './listProducts/ListProduct'
+import Statistical from './statistical/Statistical'
 
 const tabs = [
     {
@@ -38,26 +39,24 @@ function Admin() {
     const [tabActive, setTabActive] = useState('1')
     const [data, setData] = useState([])
 
-    let type = 'users'
     let component = <ListAccount/>
 
     switch (tabActive) {
         case '1':
             component = <ListAccount />
-            type = "users"
             break
         case '2':
             component = <ListTable />
-            type = "tables"
             break
         case '3':
             component = <ListCategory/>
-            type = "categorys"
             break
         case '4':
             component = <ListProduct/>
-            type = "products"
             break
+        case '5':
+            component = <Statistical/>
+            break;
         default:
             component = <ListAccount/>
     }
