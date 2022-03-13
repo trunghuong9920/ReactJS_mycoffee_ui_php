@@ -37,7 +37,6 @@ function AddTable({hide , handleReloadForAdd}) {
         }
     }
 
-
     return (
         <>
             <div className="modal_body">

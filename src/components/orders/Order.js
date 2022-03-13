@@ -37,6 +37,7 @@ function Order() {
     const [nameTable, setNameTable] = useState('')
     const [totalAllOrder, setTotalAllOrder] = useState(0)
     const [search, setSearch] = useState('')
+    const [lastIdBill, setBillData] = useState()
 
     const handleAddOrder = (item) => {
         if (idBill) {
@@ -174,6 +175,7 @@ function Order() {
                 })
         }
     }, [reloadApiOrder])
+
     useEffect(() => {
         if (idB) {
             const api = port + "/orders/getbill?idb=" + idB
@@ -184,18 +186,24 @@ function Order() {
                         setIdbill(datas[0].id)
                     }
                     else {
-                        const iduser = localStorage.getItem("idaccount")
-                        const api = port + "/pay/addbill"
+                        const api1 = port + "/pay/getall"
+                        fetch(api1)
+                            .then(res => res.json())
+                            .then(datas => {
+                                const iduser = localStorage.getItem("idaccount")
+                                const api = port + "/pay/addbill"
 
-                        const formData = new FormData()
-                        formData.append("idtable", idB)
-                        formData.append("iduser", iduser)
-                        formData.append("id", '')
-                        formData.append("status", '0')
-                        formData.append("timeout", '')
+                                const formData = new FormData()
+                                formData.append("idtable", idB)
+                                formData.append("iduser", iduser)
+                                formData.append("id", parseInt(datas[datas.length - 1].id) + 1)
+                                formData.append("status", '0')
+                                formData.append("timeout", '')
 
-                        create(api, formData)
-                        Navigate("/")
+                                create(api, formData)
+                                Navigate("/")
+                            })
+
                     }
                 })
         }
@@ -255,7 +263,7 @@ function Order() {
         }
     }
     const handleShowSwitchDesk = () => {
-        if(listOrder.length > 0){
+        if (listOrder.length > 0) {
             setShowSwitchDesk(!showSwitchDesk)
         }
     }

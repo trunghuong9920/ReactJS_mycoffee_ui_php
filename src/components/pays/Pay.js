@@ -73,7 +73,7 @@ function Pay({ showPay, hide, idB, nameTable, notifyPay }) {
             const formData = new FormData()
             formData.append("idtable", idB)
             formData.append("iduser", iduser)
-            formData.append("id", '')
+            formData.append("id", parseInt(lastIdBill) + 1)
             formData.append("status", '0')
 
             const api = port + "/pay/addbill"
