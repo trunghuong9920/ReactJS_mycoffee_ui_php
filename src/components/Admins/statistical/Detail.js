@@ -122,10 +122,6 @@ function Detail({ idBill, hide, discountAll }) {
                 </div>
                 <div className="modal_detail_footer_groupbtn">
                     <button
-                    >
-                        <i className='ti-save'></i>
-                    </button>
-                    <button
                         onClick={hide}
                     >
                         <i className='ti-back-right'></i>

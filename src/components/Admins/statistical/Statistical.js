@@ -9,7 +9,7 @@ import clsx from "clsx"
 import ApiController from "../../../services/apiController"
 import Detail from "./Detail"
 
-const listCategorys = ["Id", "Bàn", "Giảm giá", "Thời gian xuất", "Trạng thái", "Nhân viên", "Thao tác"]
+const listCategorys = ["Id", "Bàn", "Giảm giá (%)", "Thời gian xuất", "Trạng thái", "Nhân viên", "Thao tác"]
 function ListAccount() {
     const port = config()
     const [getData, setGetData] = useState([])
@@ -187,6 +187,8 @@ function ListAccount() {
                                             <button className="statistical_category_col-control-edit"
                                                 onClick={() => handleShowDetail(item.id, item.discount)}
                                             ><i className="ti-eye"></i></button>
+                                            <button className="statistical_category_col-control-edit"
+                                            ><i className="ti-close"></i></button>
                                         </div>
                                     </div>
                                 </div>

@@ -18,46 +18,80 @@ function EditAccount({ idEdit, handleEdit, handleReloadForEdit }) {
     const [account, setAccount] = useState('')
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPass, setConfirmPass] = useState('')
+    const [errorConfirmPass, setErrorConfirmPass] = useState('')
     const [error, setError] = useState('')
     const [errorAccount, setErrorAccount] = useState('')
     const [dataAccount, setDataAccount] = useState([])
     const [errorPhone, setErrorPhone] = useState('')
+
 
     const handleGetValueSelect = (e) => {
         setPermission(e.target.value)
     }
 
     const handleSaveEdit = () => {
-        if (CheckInfoEdit(account, name, phone) && errorPhone === '' && errorAccount === '') {
-            const formDt = {
-                account: account,
-                name: name,
-                phone: phone,
-                avata: getImgSrc,
-                permission: permission
+        if(password === '' && confirmPass === ''){
+            if (CheckInfoEdit(account, name, phone) && errorPhone === '' && errorAccount === '') {
+                const formDt = {
+                    account: account,
+                    name: name,
+                    phone: phone,
+                    avata: getImgSrc,
+                    permission: permission
+                }
+                const api = port + "/users/updateuser"
+                const formData = new FormData()
+                formData.append('id', id)
+                formData.append('account', account.replace(/\s+/g, ''))
+                formData.append('name', name)
+                formData.append('phone', phone)
+                formData.append('avata', getImgSrc)
+                formData.append('permission', permission)
+    
+                editData(api, formData)
+                handleReloadForEdit(id, formDt)
+                handleEdit()
             }
-            const api = port + "/users/updateuser"
-            const formData = new FormData()
-            formData.append('id', id)
-            formData.append('account', account.replace(/\s+/g, ''))
-            formData.append('name', name)
-            formData.append('phone', phone)
-            formData.append('avata', getImgSrc)
-            formData.append('permission', permission)            
-
-            editData(api, formData)
-            handleReloadForEdit(id, formDt)
-            handleEdit()
+            else {
+                setError("Vui lòng nhập đủ thông tin!")
+            }
         }
-        else {
+        else if(password != '' && confirmPass != ''){
+            if(CheckInfoEdit(account, name, phone) && errorConfirmPass === ''){
+                const formDt = {
+                    account: account,
+                    name: name,
+                    phone: phone,
+                    avata: getImgSrc,
+                    permission: permission
+                }
+                const api = port + "/users/updateuserallinfo"
+                const formData = new FormData()
+                formData.append('id', id)
+                formData.append('account', account.replace(/\s+/g, ''))
+                formData.append('name', name)
+                formData.append('phone', phone)
+                formData.append('avata', getImgSrc)
+                formData.append('permission', permission)
+                formData.append('password', password)
+    
+                editData(api, formData)
+                handleReloadForEdit(id, formDt)
+                handleEdit()
+            }
+        }
+        else{
             setError("Vui lòng nhập đủ thông tin!")
+
         }
     }
 
     //load data
     useEffect(() => {
-        const api = port + '/users/edituser?id='+id
-       
+        const api = port + '/users/edituser?id=' + id
+
         const options = {
             method: "GET"
         }
@@ -153,6 +187,16 @@ function EditAccount({ idEdit, handleEdit, handleReloadForEdit }) {
         setAvata('')
         setGetImgSrc('')
     }
+    const handleConfirmPass = (e) => {
+        setConfirmPass(e.target.value)
+
+        if (e.target.value === password) {
+            setErrorConfirmPass('')
+        }
+        else {
+            setErrorConfirmPass('Mật khẩu xác nhận không chính xác!')
+        }
+    }
     return (
         <>
             <div className="modal_body">
@@ -222,6 +266,23 @@ function EditAccount({ idEdit, handleEdit, handleReloadForEdit }) {
                                     <option value="0">Quản lý</option>
                                     <option value="1">Nhân viên</option>
                                 </select>
+                            </div>
+                            <div className="form_group">
+                                <h3 className="form_group_title">Mật khẩu:</h3>
+                                <input className="form_group_input"
+                                    placeholder='Nhập mật khẩu...'
+                                    value={password}
+                                    onChange={e => setPassword(e.target.value)}
+                                />
+                            </div>
+                            <div className="form_group">
+                                <h3 className="form_group_title">Nhập lại mật khẩu:</h3>
+                                <input className="form_group_input"
+                                    placeholder='Nhập lại mật khẩu...'
+                                    value={confirmPass}
+                                    onChange={handleConfirmPass}
+                                />
+                                <p className='form_group-error'>{errorConfirmPass}</p>
                             </div>
                         </div>
                     ))

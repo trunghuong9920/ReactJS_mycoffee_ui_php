@@ -6,7 +6,7 @@
         display: flex;
         height: 60px;
         &_col{
-            width:25%;
+            width:23.3%;
             border-right: 2px solid $color-5;
             h3{
                text-align: center;
@@ -39,7 +39,7 @@
             width: 5%;
         }
         &_col:nth-child(7){
-            width: 5%;
+            width: 10%;
         }
        
         &-active{

@@ -37,7 +37,7 @@ function Order() {
     const [nameTable, setNameTable] = useState('')
     const [totalAllOrder, setTotalAllOrder] = useState(0)
     const [search, setSearch] = useState('')
-    const [lastIdBill, setBillData] = useState()
+    const [showPay , setShowPay] = useState(false)
 
     const handleAddOrder = (item) => {
         if (idBill) {
@@ -268,7 +268,11 @@ function Order() {
         }
     }
 
-    const { showPay, handleShowPay } = useModal()
+    const handleShowPay =() => {
+        if (listOrder.length > 0) {
+            setShowPay(!showPay)
+        }
+    }
 
     const notifyForDeleteOrder = (name) =>
         toast.success(`Xóa sản phẩm ${name} thành công!`, {

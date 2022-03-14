@@ -211,7 +211,7 @@ function Info() {
     }
 
     const handleSavePass = () => {
-        if (erroPassOld === '' && errorPass === '') {
+        if (erroPassOld === '' && errorPass === '' && newPass != '') {
             setOldPass('000000')
             setNewPass('')
             setConfirmPass('')
@@ -223,6 +223,9 @@ function Info() {
             editData(api, formData)
             setEditPassword(!editPassword)
             setErrorPassOld('')
+        }
+        else{
+            setErrorPass("Vui lòng nhập đầy đủ thông tin!")
         }
     }
 
