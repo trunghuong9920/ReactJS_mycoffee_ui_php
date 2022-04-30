@@ -9,8 +9,10 @@ function DeleteProduct({ idEdit, hide , handleReloadForDelete}) {
         const api = port + "/products/delete"
         const formData = new FormData()
         formData.append("id",idEdit)
+
         deleteData(api, formData)
-        handleReloadForDelete(idEdit)
+
+        handleReloadForDelete()
         hide()
     }
     return (

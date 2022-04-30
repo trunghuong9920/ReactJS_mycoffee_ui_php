@@ -46,7 +46,6 @@ function Login() {
         else {
             if (checkInfo(account, password)) {
                 setError("Thông tin tài khoản hoặc mật khẩu không chính xác!")
-
             }
         }
     }, [data])

@@ -17,7 +17,7 @@ function DeleteTable({ id, hide, handleReloadForDelete }) {
             const formData = new FormData()
             formData.append("id", id)
             deleteData(api, formData)
-            handleReloadForDelete(id)
+            handleReloadForDelete()
             hide()
         }
         else {

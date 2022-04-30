@@ -16,15 +16,13 @@ function EditCate({ idEdit, hide, handleReloadForEdit }) {
 
     const handleSave = () =>{
         if(CheckInfo(name)){
-            const formDt = {
-                name:name
-            }
+          
             const api = port + "/categorys/update"
             const formData = new FormData()
             formData.append("id", id)
             formData.append("name", name)
             editData(api, formData)
-            handleReloadForEdit(id,formDt)
+            handleReloadForEdit()
             hide()
         }
         else{

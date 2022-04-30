@@ -117,12 +117,28 @@ function ListAccount() {
             </>
         )
     }
+    const handleChangeDate = (e) => {
+        const api = port + '/statistical/getfordate?date=' + e.target.value
+
+            const options = {
+                method: "GET"
+            }
+            fetch(api, options)
+                .then(res => res.json())
+                .then(data => {
+                    setGetData(data)
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+    }
 
     return (
         <>
             <div className="colRight_header">
                 <div className="colRight_header_left">
                     <h2>Thống kê</h2>
+                    <input type='date' onChange={handleChangeDate}/>
                 </div>
                 <div className="colRight_header_right">
                     <div className="colRight_header_right_search">

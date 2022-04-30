@@ -25,7 +25,7 @@ function DeleteAccount({ idEdit , handleDelete, handleReloadForDelete }) {
                 .catch(error => {
                     console.error('Error:', error);
                 });
-            handleReloadForDelete(idEdit)
+            handleReloadForDelete()
             handleDelete()
         }else{
             setError("Tài khoản đang được sử dụng, vui lòng đăng xuất!")

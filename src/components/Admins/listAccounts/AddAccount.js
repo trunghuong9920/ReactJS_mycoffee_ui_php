@@ -33,14 +33,6 @@ function AddAccount({ hide, handleReloadForAdd }) {
 
     const handleSaveAccount = () => {
         if (CheckInfo(account, name, phone, password, confirmPass) && errorPhone === '' && errorConfirmPass === '' && errorAccount === '') {
-            const formDt = {
-                account: account.replace(/\s+/g, ''),
-                name: name,
-                phone: phone,
-                avata: urlImg,
-                permission: permission,
-                status: 0
-            }
             const formData = new FormData()
             formData.append('account', account.replace(/\s+/g, ''))
             formData.append('name', name)
@@ -51,7 +43,7 @@ function AddAccount({ hide, handleReloadForAdd }) {
 
             const api = port + "/users/adduser"
             create(api, formData)
-            handleReloadForAdd(formDt)
+            handleReloadForAdd()
             hide();
 
         }

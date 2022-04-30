@@ -225,7 +225,9 @@ function Info() {
             setErrorPassOld('')
         }
         else{
-            setErrorPass("Vui lòng nhập đầy đủ thông tin!")
+            if(errorPass === '' && erroPassOld == ''){
+                setErrorPass("Vui lòng nhập đầy đủ thông tin!")
+            }
         }
     }
 
@@ -249,7 +251,15 @@ function Info() {
             return false;
         }
     }
-
+    const handleChangePass = (e) =>{
+        setNewPass(e.target.value)
+        if (e.target.value === confirmPass) {
+            setErrorPass('')
+        }
+        else {
+            setErrorPass('Mật khẩu xác nhận không chính xác!')
+        }
+    }
     const handleConfirmPass = (e) => {
         setConfirmPass(e.target.value)
 
@@ -260,6 +270,7 @@ function Info() {
             setErrorPass('Mật khẩu xác nhận không chính xác!')
         }
     }
+
 
     const handleCheckOldPass = (e) => {
         setOldPass(e.target.value)
@@ -517,7 +528,7 @@ function Info() {
                                         editPassword ? 'Mật khẩu mới' : ''
                                     }
                                     value={newPass}
-                                    onChange={e => setNewPass(e.target.value)}
+                                    onChange={handleChangePass}
                                 />
                                 <input
                                     className="editInfo_group_body_form_editpassword"

@@ -30,12 +30,7 @@ function EditProduct({ idEdit, hide, handleReloadForEdit }) {
 
     const handleSave = () => {
         if (CheckInfo(nameP, price) && errorPrice === '') {
-            const formDt = {
-                idc: idC,
-                name: nameP,
-                price: price,
-                img: getImgSrc
-            }
+          
             const api = port + "/products/update"
             const formData = new FormData()
             formData.append("id", id)
@@ -45,7 +40,7 @@ function EditProduct({ idEdit, hide, handleReloadForEdit }) {
             formData.append("price", price)
 
             editData(api, formData)
-            handleReloadForEdit(id, formDt)
+            handleReloadForEdit()
             hide()
         }
         else {

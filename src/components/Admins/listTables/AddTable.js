@@ -18,17 +18,12 @@ function AddTable({hide , handleReloadForAdd}) {
 
     const handleSaveTable = () =>{
         if(checkTable(name)){
-            const formDt = {
-                name:name,
-                status: 0,
-                area:area
-            }
             const api = port + "/tables/add"
             const formData = new FormData()
             formData.append('name', name)
             formData.append('area', area)
             create(api,formData)
-            handleReloadForAdd(formDt)
+            handleReloadForAdd()
             
             hide()
         }

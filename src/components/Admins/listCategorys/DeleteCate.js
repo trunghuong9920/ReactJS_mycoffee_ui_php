@@ -16,7 +16,7 @@ function DeleteCate({ id, hide, handleReloadForDelete }) {
         const formData = new FormData()
         formData.append("id",id)
         deleteData(api, formData)
-        handleReloadForDelete(id)
+        handleReloadForDelete()
         hide()
         if(data.length == 0){
             setError("")

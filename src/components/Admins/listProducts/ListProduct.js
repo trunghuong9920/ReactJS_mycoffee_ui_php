@@ -16,6 +16,7 @@ function ListProduct() {
     const [showDelete, setShowDelete] = useState(false)
     const [idEdit, setIdEdit] = useState()
     const [search, setSearch] = useState('')
+    const [reload, setReload] = useState('')
 
     const [positionPage, setPositionPage] = useState(1)
     const [newData, setNewData] = useState([])
@@ -78,39 +79,28 @@ function ListProduct() {
 
         setShowDelete(!showDelete)
     }
-    const lastItem = getData[getData.length - 1]
-    const handleReloadForAdd = (formData) => {
-        const data = [...getData]
-        const newData = {
-            id: parseInt(lastItem.id) + 1,
-            img: formData.img,
-            name: formData.name,
-            category: formData.nameC,
-            idc: formData.idc,
-            price: formData.price
-        }
-        data.push(newData)
-        setGetData(data)
+    const handleReloadForAdd = () => {
+        setReload(!reload)
+
     }
 
-    const handleReloadForEdit = (newid, formData) => {
-        const data = [...getData];
-        const newData = data.map(
-            item => {
-                if (item.id === newid) {
-                    item.name = formData.name
-                    item.idc = formData.idc
-                    item.price = formData.price
-                    item.img = formData.img
-                }
-                return item
-            }
-        )
-        setGetData(newData)
+    const handleReloadForEdit = () => {
+        setReload(!reload)
+
     }
-    const handleReloadForDelete = (newId) => {
-        setGetData(getData.filter(item => item.id !== newId))
+    const handleReloadForDelete = () => {
+        setReload(!reload)
     }
+    //reload
+    useEffect(() => {
+        const api = port + '/products/getall'
+        fetch(api)
+            .then(res => res.json())
+            .then(data => {
+                setGetData(data)
+            })
+    }, [reload])
+
     //Load data
     useEffect(() => {
         if (search === '') {
@@ -122,7 +112,7 @@ function ListProduct() {
                 })
         }
         else {
-            const api = port + '/search/products?qsearch='+search
+            const api = port + '/search/products?qsearch=' + search
 
             const options = {
                 method: "GET"
@@ -130,7 +120,7 @@ function ListProduct() {
             fetch(api, options)
                 .then(res => res.json())
                 .then(data => {
-                   setGetData(data)
+                    setGetData(data)
                 })
                 .catch(error => {
                     console.error('Error:', error);

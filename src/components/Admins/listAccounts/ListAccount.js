@@ -19,6 +19,7 @@ function ListAccount() {
     const [showAdd, setShowAdd] = useState(false)
     const [showEdit, setShowEdit] = useState(false)
     const [showDelete, setShowDelete] = useState(false)
+    const [reload, setReload] = useState(true)
     const [idEdit, setIdEdit] = useState()
     const [search, setSearch] = useState('')
 
@@ -114,40 +115,28 @@ function ListAccount() {
         setShowDelete(!showDelete)
     }
     const lastItem = getData[getData.length - 1]
-    const handleReloadForAdd = (formData) => {
-        const data = [...getData]
-        const newData = {
-            id: parseInt(lastItem.id) + 1,
-            account: formData.account,
-            name: formData.name,
-            phone: formData.phone,
-            avata: formData.avata,
-            status: 0,
-        }
-        data.push(newData)
-        setGetData(data)
+    console.log(getData);
+    
+    const handleReloadForAdd = () => {
+        setReload(!reload)
     }
 
-    const handleReloadForEdit = (newid, formData) => {
-        const data = [...getData];
-        const newData = data.map(
-            item => {
-                if (item.id === newid) {
-                    item.account = formData.account
-                    item.name = formData.name
-                    item.phone = formData.phone
-                    item.avata = formData.avata
-                    item.permission = formData.permission
-                }
-                return item
-            }
-        )
-        setGetData(newData)
+    const handleReloadForEdit = () => {
+        setReload(!reload)
     }
-    const handleReloadForDelete = (newId) => {
-        setGetData(getData.filter(item => item.id !== newId))
+    const handleReloadForDelete = () => {
+        setReload(!reload)
     }
 
+    //reload
+    useEffect(() =>{
+        const api = port + '/users/getalldata'
+            fetch(api)
+                .then(res => res.json())
+                .then(data => {
+                    setGetData(data)
+                })
+    },[reload])
     //Load data
     useEffect(() => {
         if (search === '') {

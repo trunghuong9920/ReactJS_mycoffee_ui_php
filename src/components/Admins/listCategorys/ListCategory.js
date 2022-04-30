@@ -14,6 +14,7 @@ function ListCategory() {
     const [showAdd, setShowAdd] = useState(false)
     const [showDelete, setShowDelete] = useState(false)
     const [search, setSearch] = useState('')
+    const [reload, setReload] = useState(true)
 
     const [positionPage, setPositionPage] = useState(1)
     const [newData, setNewData] = useState([])
@@ -81,30 +82,15 @@ function ListCategory() {
         setShowDelete(!showDelete)
     }
 
-    const lastItem = getData[getData.length - 1]
-    const handleReloadForAdd = (formData) => {
-        const data = [...getData]
-        const newData = {
-            id: parseInt(lastItem.id) + 1,
-            name: formData.name,
-        }
-        data.push(newData)
-        setGetData(data)
+    const handleReloadForAdd = () => {
+        setReload(!reload)
     }
-    const handleReloadForEdit = (newid, formData) => {
-        const data = [...getData];
-        const newData = data.map(
-            item => {
-                if (item.id === newid) {
-                    item.name = formData.name
-                }
-                return item
-            }
-        )
-        setGetData(newData)
+    const handleReloadForEdit = () => {
+        setReload(!reload)
+
     }
-    const handleReloadForDelete = (newId) => {
-        setGetData(getData.filter(item => item.id !== newId))
+    const handleReloadForDelete = () => {
+        setReload(!reload)
     }
 
 
@@ -123,6 +109,15 @@ function ListCategory() {
         )
     }
 
+    //reload
+    useEffect(() => {
+        const api = port + '/categorys/getall'
+        fetch(api)
+            .then(res => res.json())
+            .then(data => {
+                setGetData(data)
+            })
+    }, [reload])
     //Load data
     useEffect(() => {
         if (search === '') {
@@ -133,16 +128,16 @@ function ListCategory() {
                     setGetData(data)
                 })
         }
-        else{
-            const api = port + '/search/categorys?qsearch='+search
-           
+        else {
+            const api = port + '/search/categorys?qsearch=' + search
+
             const options = {
                 method: "GET"
             }
             fetch(api, options)
                 .then(res => res.json())
                 .then(data => {
-                   setGetData(data)
+                    setGetData(data)
                 })
                 .catch(error => {
                     console.error('Error:', error);

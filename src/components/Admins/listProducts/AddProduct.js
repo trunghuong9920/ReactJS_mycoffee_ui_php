@@ -31,13 +31,6 @@ function AddProduct({ hide, handleReloadForAdd }) {
     }
     const handleSave = () => {
         if (CheckInfo(nameP, price) && errorPrice === '') {
-            const formDt = {
-                nameC: nameC,
-                idc: idC,
-                img: urlImg,
-                name: nameP,
-                price: price
-            }
             const api = port + "/products/add"
            
             const formData = new FormData()
@@ -47,7 +40,7 @@ function AddProduct({ hide, handleReloadForAdd }) {
             formData.append('price', price)
 
 
-            handleReloadForAdd(formDt)
+            handleReloadForAdd()
             create(api, formData)
             hide()
         }
@@ -94,7 +87,7 @@ function AddProduct({ hide, handleReloadForAdd }) {
         }
         return false
     }
-
+    
     const handleGetPrice = (e) => {
         setPrice(e.target.value)
         if(checkNumber(e.target.value)){

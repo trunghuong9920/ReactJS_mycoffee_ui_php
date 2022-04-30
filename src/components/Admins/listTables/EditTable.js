@@ -22,11 +22,6 @@ function EditTable({ idEdit, hide, handleReloadForEdit }) {
 
     const handleSaveTable = () =>{
         if(checkTable(name)){
-            const formDt = {
-                name:name,
-                status: status,
-                area: area
-            }
             const api = port + "/tables/update"
             const formData = new FormData()
             formData.append("id",id)
@@ -34,7 +29,7 @@ function EditTable({ idEdit, hide, handleReloadForEdit }) {
             formData.append("area",area)
 
             editData(api, formData)
-            handleReloadForEdit(id,formDt)
+            handleReloadForEdit()
             hide()
         }
         else{

@@ -34,13 +34,6 @@ function EditAccount({ idEdit, handleEdit, handleReloadForEdit }) {
     const handleSaveEdit = () => {
         if(password === '' && confirmPass === ''){
             if (CheckInfoEdit(account, name, phone) && errorPhone === '' && errorAccount === '') {
-                const formDt = {
-                    account: account,
-                    name: name,
-                    phone: phone,
-                    avata: getImgSrc,
-                    permission: permission
-                }
                 const api = port + "/users/updateuser"
                 const formData = new FormData()
                 formData.append('id', id)
@@ -51,7 +44,7 @@ function EditAccount({ idEdit, handleEdit, handleReloadForEdit }) {
                 formData.append('permission', permission)
     
                 editData(api, formData)
-                handleReloadForEdit(id, formDt)
+                handleReloadForEdit()
                 handleEdit()
             }
             else {

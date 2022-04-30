@@ -14,6 +14,7 @@ function ListTable() {
     const [idEdit, setIdEdit] = useState()
     const [getData, setGetData] = useState([])
     const [search, setSearch] = useState('')
+    const [reload, setReload] = useState(true)
 
     const [positionPage, setPositionPage] = useState(1)
     const [newData, setNewData] = useState([])
@@ -63,35 +64,17 @@ function ListTable() {
         setPositionPage(value)
     }
 
-    const lastItem = getData[getData.length - 1]
-    const handleReloadForAdd = (formData) => {
-        const data = [...getData]
-        const newData = {
-            id: parseInt(lastItem.id) + 1,
-            name: formData.name,
-            status: formData.status,
-            area: formData.area
-        }
-        data.push(newData)
-        setGetData(data)
+    const handleReloadForAdd = () => {
+        setReload(!reload)
     }
 
-    const handleReloadForEdit = (newid, formData) => {
-        const data = [...getData];
-        const newData = data.map(
-            item => {
-                if (item.id === newid) {
-                    item.name = formData.name
-                    item.area = formData.area
-                }
-                return item
-            }
-        )
-        setGetData(newData)
+    const handleReloadForEdit = () => {
+        setReload(!reload)
     }
 
-    const handleReloadForDelete = (newId) => {
-        setGetData(getData.filter(item => item.id !== newId))
+    const handleReloadForDelete = () => {
+        setReload(!reload)
+
     }
 
     const handleAdd = () => {
@@ -108,6 +91,16 @@ function ListTable() {
 
         setShowDelete(!showDelete)
     }
+
+    //reload
+    useEffect(()=>{
+        const api = port + '/tables/getall'
+        fetch(api)
+            .then(res => res.json())
+            .then(data => {
+                setGetData(data)
+            })
+    }, [reload])
 
     //Load data
     useEffect(() => {
