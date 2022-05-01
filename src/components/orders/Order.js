@@ -64,7 +64,9 @@ function Order() {
                     it => {
                         if (it.id === item.id) {
                             it.amount = value
+                            console.log(it.idp);
                         }
+                        
                         return it
                     }
 
@@ -73,6 +75,7 @@ function Order() {
                 const formData = new FormData()
                 formData.append("id", item.id)
                 formData.append("amount", value)
+
                 const api = port + "/orders/updateamount"
                 editData(api, formData)
 
